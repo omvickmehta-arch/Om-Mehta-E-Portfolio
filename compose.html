@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compose — Om Mehta</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          base: 'rgb(var(--color-base) / <alpha-value>)',
+          surface: 'rgb(var(--color-surface) / <alpha-value>)',
+          surface2: 'rgb(var(--color-surface2) / <alpha-value>)',
+          hairline: 'rgb(var(--color-hairline) / <alpha-value>)',
+          ink: 'rgb(var(--color-ink) / <alpha-value>)',
+          muted: 'rgb(var(--color-muted) / <alpha-value>)',
+          gold: 'rgb(var(--color-gold) / <alpha-value>)',
+          gain: 'rgb(var(--color-gain) / <alpha-value>)',
+        },
+        fontFamily: {
+          display: ['"Fraunces"', 'serif'],
+          sans: ['"Inter"', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+      },
+    },
+  }
+</script>
+
+<script>
+  (function () {
+    var stored = localStorage.getItem('om-theme');
+    var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    if (theme === 'light') document.documentElement.classList.add('light');
+  })();
+</script>
+
+<style>
+  :root {
+    --color-base: 18 22 29;
+    --color-surface: 26 32 41;
+    --color-surface2: 31 39 51;
+    --color-hairline: 42 49 64;
+    --color-ink: 236 238 243;
+    --color-muted: 139 147 163;
+    --color-gold: 176 141 87;
+    --color-gain: 76 140 107;
+  }
+  html.light {
+    --color-base: 247 246 242;
+    --color-surface: 255 255 255;
+    --color-surface2: 241 239 234;
+    --color-hairline: 222 219 210;
+    --color-ink: 24 27 33;
+    --color-muted: 101 105 116;
+    --color-gold: 150 111 53;
+    --color-gain: 47 110 79;
+  }
+  ::selection { background: rgb(var(--color-gold)); color: rgb(var(--color-base)); }
+  :focus-visible { outline: 2px solid rgb(var(--color-gold)); outline-offset: 3px; }
+  textarea, input { field-sizing: content; }
+</style>
+</head>
+
+<body class="bg-base text-ink font-sans antialiased min-h-screen">
+
+  <div class="max-w-3xl mx-auto px-6 sm:px-10 py-16">
+
+    <div class="flex items-center justify-between mb-10">
+      <a href="thoughts.html" class="font-mono text-[11px] text-muted hover:text-gold transition-colors uppercase tracking-widest">← Back to Thoughts</a>
+      <button id="theme-toggle" aria-label="Toggle light and dark theme" class="w-9 h-9 rounded-full border border-hairline bg-surface flex items-center justify-center hover:border-gold transition-colors">
+        <svg id="icon-sun" class="w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+        <svg id="icon-moon" class="w-4 h-4 text-gold hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <p class="font-mono text-[11px] tracking-[0.25em] text-gold uppercase mb-3">Private — Not Linked Publicly</p>
+    <h1 class="font-display text-3xl sm:text-4xl text-ink mb-4">Compose a post</h1>
+    <p class="text-muted text-sm leading-relaxed mb-10 max-w-xl">
+      This page doesn't publish anything by itself — it's just a form that formats a post correctly for you. Fill it out, hit Generate, copy the code, and paste it as a new entry near the top of the <code class="text-gold">posts</code> array in <code class="text-gold">thoughts.html</code>. Commit and push, and it's live.
+    </p>
+
+    <form id="compose-form" class="space-y-6 border border-hairline rounded-2xl p-6 sm:p-8 bg-surface">
+
+      <div>
+        <label class="block font-mono text-[11px] text-muted uppercase tracking-widest mb-2">Title</label>
+        <input type="text" id="c-title" required placeholder="What's this one called?"
+          class="w-full bg-surface2 border border-hairline rounded-lg px-4 py-3 text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors font-display text-lg">
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block font-mono text-[11px] text-muted uppercase tracking-widest mb-2">Date</label>
+          <input type="date" id="c-date" required
+            class="w-full bg-surface2 border border-hairline rounded-lg px-4 py-3 text-ink focus:border-gold outline-none transition-colors font-mono text-sm">
+        </div>
+        <div>
+          <label class="block font-mono text-[11px] text-muted uppercase tracking-widest mb-2">Slug (auto, editable)</label>
+          <input type="text" id="c-slug" placeholder="auto-generated-from-title"
+            class="w-full bg-surface2 border border-hairline rounded-lg px-4 py-3 text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors font-mono text-sm">
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-mono text-[11px] text-muted uppercase tracking-widest mb-3">Categories</label>
+        <div id="c-tags" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div>
+        <label class="block font-mono text-[11px] text-muted uppercase tracking-widest mb-2">Body</label>
+        <p class="text-muted text-xs mb-2">Separate paragraphs with a blank line. Each paragraph becomes its own line in the post.</p>
+        <textarea id="c-body" required rows="10" placeholder="Write it out..."
+          class="w-full bg-surface2 border border-hairline rounded-lg px-4 py-3 text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors text-sm leading-relaxed"></textarea>
+      </div>
+
+      <button type="submit"
+        class="w-full inline-flex items-center justify-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3.5 rounded-full hover:bg-gold transition-colors">
+        Generate Code
+      </button>
+    </form>
+
+    <div id="output-block" class="mt-10 hidden">
+      <div class="flex items-center justify-between mb-3">
+        <p class="font-mono text-[11px] text-gold uppercase tracking-widest">Paste this into thoughts.html</p>
+        <button id="copy-btn" class="font-mono text-[11px] text-muted hover:text-gold transition-colors uppercase tracking-widest">Copy</button>
+      </div>
+      <pre id="output-code" class="border border-hairline rounded-2xl p-5 bg-surface2 text-ink text-xs sm:text-sm leading-relaxed overflow-x-auto whitespace-pre-wrap"></pre>
+      <p class="text-muted text-xs mt-3">Paste it as a new object right after <code class="text-gold">var posts = [</code> in thoughts.html, followed by a comma if it's not the only post.</p>
+    </div>
+
+  </div>
+
+  <script>
+    // Keep this list identical to the TAGS array in thoughts.html
+    var TAGS = ["Finance", "Career & Internships", "Leadership", "Life & Interests"];
+
+    var tagsContainer = document.getElementById('c-tags');
+    TAGS.forEach(function (tag) {
+      var id = 'tag-' + tag.replace(/[^a-z0-9]/gi, '');
+      var label = document.createElement('label');
+      label.className = 'flex items-center gap-2 border border-hairline rounded-full px-3.5 py-2 cursor-pointer text-sm text-muted has-[:checked]:border-gold has-[:checked]:text-ink transition-colors';
+      label.innerHTML =
+        '<input type="checkbox" value="' + tag + '" id="' + id + '" class="accent-current">' +
+        '<span class="font-mono text-[11px] uppercase tracking-widest">' + tag + '</span>';
+      tagsContainer.appendChild(label);
+    });
+
+    // Default date to today
+    document.getElementById('c-date').value = new Date().toISOString().split('T')[0];
+
+    function slugify(text) {
+      return text.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    function formatDate(isoDate) {
+      var d = new Date(isoDate + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    document.getElementById('c-title').addEventListener('input', function (e) {
+      var slugField = document.getElementById('c-slug');
+      if (!slugField.dataset.touched) slugField.value = slugify(e.target.value);
+    });
+    document.getElementById('c-slug').addEventListener('input', function () {
+      this.dataset.touched = 'true';
+    });
+
+    document.getElementById('compose-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var title = document.getElementById('c-title').value.trim();
+      var date = document.getElementById('c-date').value;
+      var slug = document.getElementById('c-slug').value.trim() || slugify(title);
+      var bodyRaw = document.getElementById('c-body').value.trim();
+      var paragraphs = bodyRaw.split(/\n\s*\n/).map(function (p) { return p.trim().replace(/\n/g, ' '); }).filter(Boolean);
+      var checkedTags = Array.prototype.slice.call(document.querySelectorAll('#c-tags input:checked')).map(function (el) { return el.value; });
+
+      function esc(str) { return str.replace(/\\/g, '\\\\').replace(/"/g, '\\"'); }
+
+      var code = '  {\n' +
+        '    id: "' + esc(slug) + '",\n' +
+        '    date: "' + formatDate(date) + '",\n' +
+        '    title: "' + esc(title) + '",\n' +
+        '    tags: [' + checkedTags.map(function (t) { return '"' + esc(t) + '"'; }).join(', ') + '],\n' +
+        '    body: [\n' +
+        paragraphs.map(function (p) { return '      "' + esc(p) + '"'; }).join(',\n') + '\n' +
+        '    ]\n' +
+        '  },';
+
+      document.getElementById('output-code').textContent = code;
+      document.getElementById('output-block').classList.remove('hidden');
+      document.getElementById('output-block').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    document.getElementById('copy-btn').addEventListener('click', function () {
+      var code = document.getElementById('output-code').textContent;
+      navigator.clipboard.writeText(code).then(function () {
+        var btn = document.getElementById('copy-btn');
+        var original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = original; }, 1500);
+      });
+    });
+
+    // Theme toggle
+    var themeBtn = document.getElementById('theme-toggle');
+    var iconSun = document.getElementById('icon-sun');
+    var iconMoon = document.getElementById('icon-moon');
+    function reflectIcon() {
+      var isLight = document.documentElement.classList.contains('light');
+      iconSun.classList.toggle('hidden', isLight);
+      iconMoon.classList.toggle('hidden', !isLight);
+    }
+    reflectIcon();
+    themeBtn.addEventListener('click', function () {
+      var isLight = document.documentElement.classList.toggle('light');
+      localStorage.setItem('om-theme', isLight ? 'light' : 'dark');
+      reflectIcon();
+    });
+  </script>
+
+</body>
+</html>
