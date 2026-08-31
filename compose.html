@@ -94,6 +94,13 @@
       This page doesn't publish anything by itself — it's just a form that formats a post correctly for you. Fill it out, hit Generate, copy the code, and paste it as a new entry near the top of the <code class="text-gold">posts</code> array in <code class="text-gold">thoughts.html</code>. Commit and push, and it's live.
     </p>
 
+    <details class="mb-10 border border-hairline rounded-2xl px-6 py-5">
+      <summary class="font-mono text-[11px] text-gold uppercase tracking-widest cursor-pointer select-none">Deleting a post instead?</summary>
+      <p class="text-muted text-sm leading-relaxed mt-4">
+        No tool needed — open thoughts.html, find that post's <code class="text-gold">{ ... }</code> block in the <code class="text-gold">posts</code> array, and delete the whole thing (including its trailing comma). If it was the last post in the array, make sure the block before it doesn't end in a comma either. Commit and push — it's gone from the live site.
+      </p>
+    </details>
+
     <form id="compose-form" class="space-y-6 border border-hairline rounded-2xl p-6 sm:p-8 bg-surface">
 
       <div>
