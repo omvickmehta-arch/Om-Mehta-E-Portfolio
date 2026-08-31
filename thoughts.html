@@ -168,6 +168,8 @@
        - title: post title
        - tags: array of 1+ strings, each one from the TAGS list above
        - body: array of paragraph strings (each becomes its own <p>)
+       - pinned: optional. Set to true and it always shows, ignoring the
+         active filter — meant for a welcome/intro post, not regular posts.
        Newest post should go first in the array.
        ========================================================= */
     var posts = [
@@ -176,6 +178,7 @@
         date: "Aug 29, 2026",
         title: "Starting this blog",
         tags: ["Life & Interests"],
+        pinned: true,
         body: [
           "I wanted a place to write things down as I figure them out, not just after I've figured them out. This is that place.",
           "Expect notes on what I'm learning in finance classes, things I pick up from internships, and probably a few detours into hiking, basketball, and whatever I'm cooking that week.",
@@ -194,10 +197,10 @@
        5. Giscus will show you a repo-id and category-id. Paste them below.
        Until these are filled in, a setup notice shows instead of a broken widget.
        ========================================================= */
-    var GISCUS_REPO = "your-github-username/your-repo-name";
-    var GISCUS_REPO_ID = "PASTE_REPO_ID_HERE";
+    var GISCUS_REPO = "omvickmehta-arch/Om-Mehta-E-Portfolio";
+    var GISCUS_REPO_ID = "R_kgDOUIK44A";
     var GISCUS_CATEGORY = "Comments";
-    var GISCUS_CATEGORY_ID = "PASTE_CATEGORY_ID_HERE";
+    var GISCUS_CATEGORY_ID = "DIC_kwDOUIK44M4DEi15";
 
     var activeTag = 'All';
 
@@ -225,14 +228,17 @@
       var list = document.getElementById('post-list');
       list.innerHTML = '';
 
-      var visible = activeTag === 'All'
-        ? posts
-        : posts.filter(function (p) { return (p.tags || []).indexOf(activeTag) !== -1; });
+      var visible = posts.filter(function (p) {
+        return p.pinned || activeTag === 'All' || (p.tags || []).indexOf(activeTag) !== -1;
+      });
 
       visible.forEach(function (post) {
         var tagChips = (post.tags || []).map(function (t) {
           return '<span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">' + t + '</span>';
         }).join('');
+        var pinnedChip = post.pinned
+          ? '<span class="text-[10px] font-mono uppercase tracking-widest text-ink bg-gold rounded-full px-2.5 py-1">Start Here</span>'
+          : '';
 
         var card = document.createElement('a');
         card.href = '#' + post.id;
@@ -240,7 +246,7 @@
         card.innerHTML =
           '<div class="flex items-center justify-between flex-wrap gap-3 mb-3">' +
             '<p class="font-mono text-[11px] text-muted uppercase tracking-widest">' + post.date + '</p>' +
-            '<div class="flex flex-wrap gap-2">' + tagChips + '</div>' +
+            '<div class="flex flex-wrap gap-2">' + pinnedChip + tagChips + '</div>' +
           '</div>' +
           '<h2 class="font-display text-2xl text-ink mb-3">' + post.title + '</h2>' +
           '<p class="text-muted text-sm leading-relaxed">' + post.body[0] + '</p>' +
