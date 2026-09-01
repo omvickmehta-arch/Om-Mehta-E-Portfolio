@@ -1,107 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Thoughts — Om Mehta</title>
-<meta name="description" content="Om Mehta's blog — notes on finance, school, and everything in between." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Thoughts — Om Mehta</title>
+  <meta name="description" content="Om Mehta's blog — notes on finance, school, and everything in between." />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        colors: {
-          base: 'rgb(var(--color-base) / <alpha-value>)',
-          surface: 'rgb(var(--color-surface) / <alpha-value>)',
-          surface2: 'rgb(var(--color-surface2) / <alpha-value>)',
-          hairline: 'rgb(var(--color-hairline) / <alpha-value>)',
-          ink: 'rgb(var(--color-ink) / <alpha-value>)',
-          muted: 'rgb(var(--color-muted) / <alpha-value>)',
-          gold: 'rgb(var(--color-gold) / <alpha-value>)',
-          gain: 'rgb(var(--color-gain) / <alpha-value>)',
-        },
-        fontFamily: {
-          display: ['"Fraunces"', 'serif'],
-          sans: ['"Inter"', 'sans-serif'],
-          mono: ['"IBM Plex Mono"', 'monospace'],
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            base: 'rgb(var(--color-base) / <alpha-value>)',
+            surface: 'rgb(var(--color-surface) / <alpha-value>)',
+            surface2: 'rgb(var(--color-surface2) / <alpha-value>)',
+            hairline: 'rgb(var(--color-hairline) / <alpha-value>)',
+            ink: 'rgb(var(--color-ink) / <alpha-value>)',
+            muted: 'rgb(var(--color-muted) / <alpha-value>)',
+            gold: 'rgb(var(--color-gold) / <alpha-value>)',
+            gain: 'rgb(var(--color-gain) / <alpha-value>)',
+          },
+          fontFamily: {
+            display: ['"Fraunces"', 'serif'],
+            sans: ['"Inter"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
         },
       },
-    },
-  }
-</script>
-
-<script>
-  (function () {
-    var stored = localStorage.getItem('om-theme');
-    var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    if (theme === 'light') document.documentElement.classList.add('light');
-    if (localStorage.getItem('om-reduced-motion') === 'true') {
-      document.documentElement.classList.add('no-motion');
     }
-  })();
-</script>
+  </script>
 
-<style>
-  :root {
-    --color-base: 18 22 29;
-    --color-surface: 26 32 41;
-    --color-surface2: 31 39 51;
-    --color-hairline: 42 49 64;
-    --color-ink: 236 238 243;
-    --color-muted: 139 147 163;
-    --color-gold: 176 141 87;
-    --color-gain: 76 140 107;
-  }
-  html.light {
-    --color-base: 247 246 242;
-    --color-surface: 255 255 255;
-    --color-surface2: 241 239 234;
-    --color-hairline: 222 219 210;
-    --color-ink: 24 27 33;
-    --color-muted: 101 105 116;
-    --color-gold: 150 111 53;
-    --color-gain: 47 110 79;
-  }
-  html { scroll-behavior: smooth; }
+  <script>
+    (function () {
+      var stored = localStorage.getItem('om-theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      if (theme === 'light') document.documentElement.classList.add('light');
+      if (localStorage.getItem('om-reduced-motion') === 'true') {
+        document.documentElement.classList.add('no-motion');
+      }
+    })();
+  </script>
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-  }
-  html.no-motion {
-    scroll-behavior: auto !important;
-  }
-  html.no-motion * {
-    animation-duration: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0s !important;
-    transform: none !important;
-  }
-  html.no-motion .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  html.no-motion .card-hover:hover {
-    transform: none !important;
-  }
+  <style>
+    :root {
+      --color-base: 18 22 29;
+      --color-surface: 26 32 41;
+      --color-surface2: 31 39 51;
+      --color-hairline: 42 49 64;
+      --color-ink: 236 238 243;
+      --color-muted: 139 147 163;
+      --color-gold: 176 141 87;
+      --color-gain: 76 140 107;
+    }
+    html.light {
+      --color-base: 247 246 242;
+      --color-surface: 255 255 255;
+      --color-surface2: 241 239 234;
+      --color-hairline: 222 219 210;
+      --color-ink: 24 27 33;
+      --color-muted: 101 105 116;
+      --color-gold: 150 111 53;
+      --color-gain: 47 110 79;
+    }
+    html { scroll-behavior: smooth; }
 
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.is-visible { opacity: 1; transform: translateY(0); }
-  .card-hover { transition: transform 0.35s ease, border-color 0.35s ease; }
-  .card-hover:hover { transform: translateY(-4px); border-color: rgb(var(--color-gold)); }
-  ::selection { background: rgb(var(--color-gold)); color: rgb(var(--color-base)); }
-  :focus-visible { outline: 2px solid rgb(var(--color-gold)); outline-offset: 3px; }
-  .post-body p { margin-bottom: 1.1em; line-height: 1.75; }
-  .hidden-view { display: none; }
-  .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
-  #main-nav { overflow: visible; }
-</style>
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    }
+    html.no-motion {
+      scroll-behavior: auto !important;
+    }
+    html.no-motion * {
+      animation-duration: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0s !important;
+      transform: none !important;
+    }
+    html.no-motion .reveal {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    html.no-motion .card-hover:hover {
+      transform: none !important;
+    }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .card-hover { transition: transform 0.35s ease, border-color 0.35s ease; }
+    .card-hover:hover { transform: translateY(-4px); border-color: rgb(var(--color-gold)); }
+    ::selection { background: rgb(var(--color-gold)); color: rgb(var(--color-base)); }
+    :focus-visible { outline: 2px solid rgb(var(--color-gold)); outline-offset: 3px; }
+    .post-body p { margin-bottom: 1.1em; line-height: 1.75; }
+    .hidden-view { display: none; }
+    .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
+
+    /* Fix for the nav bubble – no wrapping, no clipping */
+    #main-nav {
+      overflow: visible !important;
+      width: 94%;
+      max-width: 520px;
+    }
+    #main-nav > div {
+      flex-wrap: nowrap !important;
+      padding: 0.5rem 0.75rem !important;
+    }
+    #main-nav .nav-inner {
+      display: flex;
+      flex: 1 1 auto;
+      justify-content: flex-end;
+      gap: 0.1rem;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    @media (min-width: 480px) {
+      #main-nav .nav-inner { font-size: 11px; gap: 0.15rem; }
+    }
+    #main-nav .nav-inner a {
+      padding: 0.4rem 0.6rem;
+      border-radius: 999px;
+      font-size: inherit;
+      letter-spacing: 0.05em;
+    }
+    #main-nav .nav-inner a:last-child {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      border: 1px solid rgba(var(--color-hairline));
+      background: rgba(var(--color-surface2), 0.5);
+    }
+  </style>
 </head>
 
 <body class="bg-base text-ink font-sans antialiased">
@@ -122,13 +155,13 @@
     </button>
   </div>
 
-  <!-- FLOATING PILL NAV -->
-  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-    <div class="flex items-center justify-between gap-1 rounded-full border border-hairline bg-surface/80 backdrop-blur-md px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <a href="index.html" class="flex items-center pl-3 pr-2 font-mono text-[11px] tracking-widest text-gold">← OM</a>
-      <div class="flex flex-1 justify-end gap-1 font-mono text-[10.5px] sm:text-[11px] tracking-widest uppercase text-muted">
-        <a href="index.html" class="px-2.5 py-2 rounded-full hover:text-ink transition-colors">Home</a>
-        <a href="index.html#contact" class="px-3 py-2 rounded-full border border-hairline bg-surface2 text-ink hover:border-gold transition-colors">Contact</a>
+  <!-- FLOATING PILL NAV (fixed with custom styles) -->
+  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+    <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+      <a href="index.html" class="flex items-center pl-3 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">← OM</a>
+      <div class="nav-inner">
+        <a href="index.html" class="hover:text-ink transition-colors">Home</a>
+        <a href="index.html#contact" class="hover:text-ink transition-colors">Contact</a>
       </div>
     </div>
   </nav>
@@ -165,7 +198,7 @@
     </div>
   </main>
 
-  <!-- CONTACT SECTION (replicated from index.html) -->
+  <!-- CONTACT SECTION (clearly visible) -->
   <section id="contact" class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-20">
     <div class="max-w-3xl mx-auto">
       <div class="reveal grid lg:grid-cols-[1.3fr_1fr] gap-10 items-start">
