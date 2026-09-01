@@ -158,7 +158,7 @@
        BLOG POSTS
        The easy way to add one: open compose.html, fill out the form,
        and paste the code it generates in as a new entry here.
-       - id: short unique slug, no spaces (used for the comment thread)
+       - id: short unique slug, no spaces
        - date: display date, e.g. "Aug 29, 2026"
        - title: post title
        - tags: array of 1+ strings, each one from the TAGS list above
@@ -167,20 +167,7 @@
          active filter — meant for a welcome/intro post, not regular posts.
        Newest post should go first in the array.
        ========================================================= */
-    var posts = [
-      {
-        id: "starting-this-blog",
-        date: "Aug 29, 2026",
-        title: "Starting this blog",
-        tags: ["Life & Interests"],
-        pinned: true,
-        body: [
-          "I wanted a place to write things down as I figure them out, not just after I've figured them out. This is that place.",
-          "Expect notes on what I'm learning in finance classes, things I pick up from internships, and probably a few detours into hiking, basketball, and whatever I'm cooking that week.",
-          "If you read something here and want to push back or add to it, the comments are open below. I moderate them myself, so keep it real — I just won't let it turn into a mess."
-        ]
-      }
-    ];
+    var posts = [];
 
     var activeTag = 'All';
 
@@ -281,43 +268,3 @@
     }
 
     document.getElementById('back-to-list').addEventListener('click', closePost);
-
-    renderTagFilter();
-    renderPostList();
-
-    // Deep-link support: /thoughts.html#post-id opens that post directly
-    var initialHash = window.location.hash.replace('#', '');
-    if (initialHash && posts.some(function (p) { return p.id === initialHash; })) {
-      openPost(initialHash);
-    }
-
-    // Theme toggle (light/dark), with auto-sync to the device when the user hasn't chosen manually
-    var themeBtn = document.getElementById('theme-toggle');
-    var iconSun = document.getElementById('icon-sun');
-    var iconMoon = document.getElementById('icon-moon');
-
-    function reflectIcon() {
-      var isLight = document.documentElement.classList.contains('light');
-      iconSun.classList.toggle('hidden', isLight);
-      iconMoon.classList.toggle('hidden', !isLight);
-    }
-    reflectIcon();
-
-    if (themeBtn) {
-      themeBtn.addEventListener('click', function () {
-        var isLight = document.documentElement.classList.toggle('light');
-        localStorage.setItem('om-theme', isLight ? 'light' : 'dark');
-        reflectIcon();
-      });
-    }
-
-    var systemPref = window.matchMedia('(prefers-color-scheme: light)');
-    systemPref.addEventListener('change', function (e) {
-      if (localStorage.getItem('om-theme')) return; // respect an explicit manual choice
-      document.documentElement.classList.toggle('light', e.matches);
-      reflectIcon();
-    });
-  </script>
-
-</body>
-</html>
