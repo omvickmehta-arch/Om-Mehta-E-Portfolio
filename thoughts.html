@@ -36,7 +36,6 @@
   }
 </script>
 
-<!-- Set theme before first paint to avoid a flash of the wrong colors -->
 <script>
   (function () {
     var stored = localStorage.getItem('om-theme');
@@ -140,6 +139,58 @@
     </div>
   </main>
 
+  <!-- CONTACT SECTION (replicated from index.html) -->
+  <section id="contact" class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-20">
+    <div class="max-w-3xl mx-auto">
+      <div class="reveal grid lg:grid-cols-[1.3fr_1fr] gap-10 items-start">
+        <div>
+          <h2 class="font-display text-3xl sm:text-4xl text-ink mb-4">Let's talk about what's next.</h2>
+          <p class="text-muted max-w-md leading-relaxed">
+            I love the idea of making dreams possible — whether that's growing and acquiring companies or building out a portfolio — and using numbers to get there. My biggest pull is toward Corporate Development and Asset Management, but I'm genuinely open to any path in finance. Internships, analyst tracks, or just a quick call — I'd love to talk.
+          </p>
+          <div class="flex flex-wrap gap-3 mt-7">
+            <a href="mailto:Omvickmehta@gmail.com" class="inline-flex items-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3.5 rounded-full hover:bg-gold transition-colors">
+              Email Me
+            </a>
+            <a href="tel:+16469261073" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">
+              Call Me
+            </a>
+            <a href="https://www.linkedin.com/in/om--mehta" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <!-- QUICK EMAIL FORM -->
+        <div class="border border-hairline rounded-2xl p-6">
+          <p class="font-mono text-[11px] text-muted uppercase tracking-widest mb-5">Send a Quick Email</p>
+          <form id="quick-email-form" class="space-y-4">
+            <div>
+              <label for="qe-email" class="block font-mono text-[11px] text-muted mb-1.5">Your Email</label>
+              <input type="email" id="qe-email" required placeholder="you@example.com"
+                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors">
+            </div>
+            <div>
+              <label for="qe-subject" class="block font-mono text-[11px] text-muted mb-1.5">Subject</label>
+              <input type="text" id="qe-subject" required placeholder="Let's connect"
+                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors">
+            </div>
+            <div>
+              <label for="qe-message" class="block font-mono text-[11px] text-muted mb-1.5">Message</label>
+              <textarea id="qe-message" required rows="3" placeholder="Say hello..."
+                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors resize-none"></textarea>
+            </div>
+            <button type="submit"
+              class="w-full inline-flex items-center justify-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3 rounded-full hover:bg-gold transition-colors">
+              Send Email
+            </button>
+            <p class="text-[11px] text-muted leading-relaxed">Opens your email app, addressed to Omvickmehta@gmail.com, with everything filled in.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-10">
     <div class="max-w-3xl mx-auto flex flex-col sm:flex-row justify-between gap-2 text-xs font-mono text-muted">
       <p>© 2026 Om Mehta.</p>
@@ -148,25 +199,10 @@
   </footer>
 
   <script>
-    /* =========================================================
-       CATEGORIES — the fixed set of tags posts can be filed under.
-       Keep this list identical to the one in compose.html.
-       ========================================================= */
+    // Categories (same as compose.html)
     var TAGS = ["Finance", "Career & Internships", "Leadership", "Life & Interests"];
 
-    /* =========================================================
-       BLOG POSTS
-       The easy way to add one: open compose.html, fill out the form,
-       and paste the code it generates in as a new entry here.
-       - id: short unique slug, no spaces
-       - date: display date, e.g. "Aug 29, 2026"
-       - title: post title
-       - tags: array of 1+ strings, each one from the TAGS list above
-       - body: array of paragraph strings (each becomes its own <p>)
-       - pinned: optional. Set to true and it always shows, ignoring the
-         active filter — meant for a welcome/intro post, not regular posts.
-       Newest post should go first in the array.
-       ========================================================= */
+    // BLOG POSTS — start with an empty array (blank slate)
     var posts = [];
 
     var activeTag = 'All';
@@ -226,7 +262,7 @@
       });
 
       if (visible.length === 0) {
-        list.innerHTML = '<p class="text-muted text-sm font-mono">Nothing here yet under "' + activeTag + '."</p>';
+        list.innerHTML = '<p class="text-muted text-sm font-mono">No posts yet. Head to <a href="compose.html" class="text-gold hover:underline">compose</a> to write your first one.</p>';
       }
 
       requestAnimationFrame(function () {
@@ -268,3 +304,59 @@
     }
 
     document.getElementById('back-to-list').addEventListener('click', closePost);
+
+    renderTagFilter();
+    renderPostList();
+
+    // Deep-link support
+    var initialHash = window.location.hash.replace('#', '');
+    if (initialHash && posts.some(function (p) { return p.id === initialHash; })) {
+      openPost(initialHash);
+    }
+
+    // Theme toggle
+    var themeBtn = document.getElementById('theme-toggle');
+    var iconSun = document.getElementById('icon-sun');
+    var iconMoon = document.getElementById('icon-moon');
+
+    function reflectIcon() {
+      var isLight = document.documentElement.classList.contains('light');
+      iconSun.classList.toggle('hidden', isLight);
+      iconMoon.classList.toggle('hidden', !isLight);
+    }
+    reflectIcon();
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('om-theme', isLight ? 'light' : 'dark');
+        reflectIcon();
+      });
+    }
+
+    var systemPref = window.matchMedia('(prefers-color-scheme: light)');
+    systemPref.addEventListener('change', function (e) {
+      if (localStorage.getItem('om-theme')) return;
+      document.documentElement.classList.toggle('light', e.matches);
+      reflectIcon();
+    });
+
+    // Quick email form (same as index)
+    var quickForm = document.getElementById('quick-email-form');
+    if (quickForm) {
+      quickForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fromEmail = document.getElementById('qe-email').value.trim();
+        var subject = document.getElementById('qe-subject').value.trim();
+        var message = document.getElementById('qe-message').value.trim();
+        var body = message + '\n\n— From: ' + fromEmail;
+        var mailto = 'mailto:Omvickmehta@gmail.com'
+          + '?subject=' + encodeURIComponent(subject)
+          + '&body=' + encodeURIComponent(body);
+        window.location.href = mailto;
+      });
+    }
+  </script>
+
+</body>
+</html>
