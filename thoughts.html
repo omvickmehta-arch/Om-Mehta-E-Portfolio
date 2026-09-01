@@ -401,4 +401,21 @@
       });
     }
 
-    
+    // Quick email form (same as homepage)
+    var quickForm = document.getElementById('quick-email-form');
+    if (quickForm) {
+      quickForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fromEmail = document.getElementById('qe-email').value.trim();
+        var subject = document.getElementById('qe-subject').value.trim();
+        var message = document.getElementById('qe-message').value.trim();
+        var body = message + '\n\n— From: ' + fromEmail;
+        var mailto = 'mailto:Omvickmehta@gmail.com' +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+        window.location.href = mailto;
+      });
+    }
+  </script>
+</body>
+</html>
