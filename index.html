@@ -38,11 +38,9 @@
 
 <script>
   (function () {
-    // Theme
     var stored = localStorage.getItem('om-theme');
     var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     if (theme === 'light') document.documentElement.classList.add('light');
-    // Motion
     if (localStorage.getItem('om-reduced-motion') === 'true') {
       document.documentElement.classList.add('no-motion');
     }
@@ -72,7 +70,6 @@
   }
   html { scroll-behavior: smooth; }
 
-  /* Motion preferences */
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -139,13 +136,58 @@
   }
 
   .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
-  #main-nav { overflow: visible; } /* prevent clipping of backdrop blur */
+
+  /* ----- FIXED TOP NAV – no wrap, no clip ----- */
+  #main-nav {
+    overflow: visible !important;
+    width: 96%;
+    max-width: 600px;
+  }
+  #main-nav > div {
+    flex-wrap: nowrap !important;
+    padding: 0.375rem 0.5rem !important;
+  }
+  #main-nav .nav-inner {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.05rem;
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
+  @media (min-width: 480px) {
+    #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
+  }
+  @media (min-width: 640px) {
+    #main-nav .nav-inner { font-size: 10px; gap: 0.15rem; }
+  }
+  @media (min-width: 1024px) {
+    #main-nav .nav-inner { font-size: 11px; gap: 0.2rem; }
+  }
+  #main-nav .nav-inner a {
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+  #main-nav .nav-inner a:last-child {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    border: 1px solid rgb(var(--color-hairline));
+    background: rgba(var(--color-surface2), 0.4);
+  }
+  @media (max-width: 380px) {
+    #main-nav .nav-inner a { font-size: 7px !important; padding: 0.2rem 0.3rem !important; }
+    #main-nav .nav-inner a:last-child { padding: 0.2rem 0.4rem !important; }
+  }
+  /* end nav fix */
 </style>
 </head>
 
 <body class="bg-base text-ink font-sans antialiased">
 
-  <!-- THEME & MOTION TOGGLES (stacked on the right) -->
+  <!-- THEME & MOTION TOGGLES -->
   <div class="fixed top-5 right-5 z-50 flex flex-col gap-2 items-end">
     <button id="theme-toggle" aria-label="Toggle light and dark theme" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors">
       <svg id="icon-sun" class="theme-toggle-icon w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -161,18 +203,18 @@
     </button>
   </div>
 
-  <!-- FLOATING PILL NAV -->
-  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-    <div class="flex items-center justify-between gap-1 rounded-full border border-hairline bg-surface/80 backdrop-blur-md px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <a href="#hero" class="hidden sm:flex items-center pl-3 pr-2 font-mono text-[11px] tracking-widest text-gold">OM</a>
-      <div class="flex flex-1 justify-between sm:justify-end sm:gap-1 font-mono text-[10.5px] sm:text-[11px] tracking-widest uppercase text-muted">
-        <a href="#experience" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors" data-nav>Exp</a>
-        <a href="#leadership" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors" data-nav>Lead</a>
-        <a href="#community" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors" data-nav>Community</a>
-        <a href="#education" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors" data-nav>Edu</a>
-        <a href="#interests" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors" data-nav>Interests</a>
-        <a href="thoughts.html" class="nav-link px-2.5 py-2 rounded-full hover:text-ink transition-colors">Thoughts</a>
-        <a href="#contact" class="nav-link px-3 py-2 rounded-full border border-hairline bg-surface2 text-ink hover:border-gold transition-colors" data-nav>Contact</a>
+  <!-- FLOATING PILL NAV (fixed) -->
+  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+    <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+      <a href="#hero" class="hidden sm:flex items-center pl-2 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">OM</a>
+      <div class="nav-inner">
+        <a href="#experience" class="nav-link hover:text-ink transition-colors">Exp</a>
+        <a href="#leadership" class="nav-link hover:text-ink transition-colors">Lead</a>
+        <a href="#community" class="nav-link hover:text-ink transition-colors">Comm</a>
+        <a href="#education" class="nav-link hover:text-ink transition-colors">Edu</a>
+        <a href="#interests" class="nav-link hover:text-ink transition-colors">Interests</a>
+        <a href="thoughts.html" class="nav-link hover:text-ink transition-colors">Thoughts</a>
+        <a href="#contact" class="nav-link hover:text-ink transition-colors">Contact</a>
       </div>
     </div>
   </nav>
@@ -483,8 +525,6 @@
     var motionIcon = document.getElementById('motion-icon');
     function reflectMotion() {
       var isReduced = document.documentElement.classList.contains('no-motion');
-      motionIcon.textContent = isReduced ? '⟳' : '⟳'; // you can use a different icon if you like, e.g., '⊘' or '✕'
-      // Simple indicator: if reduced, show a strikethrough or something
       motionIcon.style.opacity = isReduced ? '0.5' : '1';
     }
     reflectMotion();
@@ -493,7 +533,6 @@
         var isReduced = document.documentElement.classList.toggle('no-motion');
         localStorage.setItem('om-reduced-motion', String(isReduced));
         reflectMotion();
-        // Also force re-run reveal observer to set opacity to 1 if reduced
         if (isReduced) {
           document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
         }
