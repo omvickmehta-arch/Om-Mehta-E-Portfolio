@@ -101,7 +101,7 @@
     .hidden-view { display: none; }
     .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
 
-    /* ----- FIXED TOP NAV (same as index) ----- */
+    /* ----- FIXED TOP NAV (consistent font) ----- */
     #main-nav {
       overflow: visible !important;
       width: 96%;
@@ -119,6 +119,7 @@
       gap: 0.05rem;
       font-size: 8px;
       letter-spacing: 0.04em;
+      font-family: 'Inter', sans-serif;
     }
     @media (min-width: 480px) {
       #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
@@ -134,12 +135,20 @@
       border-radius: 999px;
       white-space: nowrap;
       transition: color 0.2s;
+      font-family: inherit;
     }
     #main-nav .nav-inner a:last-child {
       padding-left: 0.6rem;
       padding-right: 0.6rem;
       border: 1px solid rgb(var(--color-hairline));
       background: rgba(var(--color-surface2), 0.4);
+    }
+    #main-nav .om-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
     @media (max-width: 380px) {
       #main-nav .nav-inner a { font-size: 7px !important; padding: 0.2rem 0.3rem !important; }
@@ -170,7 +179,7 @@
   <!-- FLOATING PILL NAV (fixed) -->
   <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
     <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <a href="index.html" class="flex items-center pl-2 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">← OM</a>
+      <a href="index.html" class="om-link text-gold whitespace-nowrap">← OM</a>
       <div class="nav-inner">
         <a href="index.html" class="hover:text-ink transition-colors">Home</a>
         <a href="index.html#contact" class="hover:text-ink transition-colors">Contact</a>
@@ -210,7 +219,7 @@
     </div>
   </main>
 
-  <!-- CONTACT SECTION (clearly visible) -->
+  <!-- CONTACT SECTION -->
   <section id="contact" class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-20">
     <div class="max-w-3xl mx-auto">
       <div class="reveal grid lg:grid-cols-[1.3fr_1fr] gap-10 items-start">
@@ -245,12 +254,9 @@
   </footer>
 
   <script>
-    // --- Categories (same as compose.html) ---
+    // --- Categories ---
     var TAGS = ["Finance", "Career & Internships", "Leadership", "Life & Interests"];
-
-    // --- Empty posts array (no posts yet) ---
     var posts = [];
-
     var activeTag = 'All';
 
     function renderTagFilter() {
@@ -276,16 +282,13 @@
     function renderPostList() {
       var list = document.getElementById('post-list');
       list.innerHTML = '';
-
       var visible = posts.filter(function (p) {
         return p.pinned || activeTag === 'All' || (p.tags || []).indexOf(activeTag) !== -1;
       });
-
       if (visible.length === 0) {
         list.innerHTML = '<p class="text-muted text-sm font-mono">No posts yet.</p>';
         return;
       }
-
       visible.forEach(function (post) {
         var tagChips = (post.tags || []).map(function (t) {
           return '<span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">' + t + '</span>';
@@ -293,7 +296,6 @@
         var pinnedChip = post.pinned
           ? '<span class="text-[10px] font-mono uppercase tracking-widest text-ink bg-gold rounded-full px-2.5 py-1">Start Here</span>'
           : '';
-
         var card = document.createElement('a');
         card.href = '#' + post.id;
         card.className = 'reveal block border border-hairline rounded-2xl p-7 card-hover mb-5';
@@ -311,7 +313,6 @@
         });
         list.appendChild(card);
       });
-
       requestAnimationFrame(function () {
         document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
       });
@@ -347,17 +348,15 @@
 
     document.getElementById('back-to-list').addEventListener('click', closePost);
 
-    // --- Initial render ---
     renderTagFilter();
     renderPostList();
 
-    // --- Deep-link support ---
     var initialHash = window.location.hash.replace('#', '');
     if (initialHash && posts.some(function (p) { return p.id === initialHash; })) {
       openPost(initialHash);
     }
 
-    // --- Theme toggle ---
+    // Theme toggle
     var themeBtn = document.getElementById('theme-toggle');
     var iconSun = document.getElementById('icon-sun');
     var iconMoon = document.getElementById('icon-moon');
@@ -381,7 +380,7 @@
       reflectIcon();
     });
 
-    // --- Motion toggle ---
+    // Motion toggle
     var motionBtn = document.getElementById('motion-toggle');
     var motionIcon = document.getElementById('motion-icon');
     function reflectMotion() {
@@ -400,7 +399,7 @@
       });
     }
 
-    // --- Quick email form ---
+    // Quick email form
     var quickForm = document.getElementById('quick-email-form');
     if (quickForm) {
       quickForm.addEventListener('submit', function (e) {
