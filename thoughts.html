@@ -101,39 +101,51 @@
     .hidden-view { display: none; }
     .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
 
-    /* Fix for the nav bubble – no wrapping, no clipping */
+    /* ----- FIXED TOP NAV (same as index) ----- */
     #main-nav {
       overflow: visible !important;
-      width: 94%;
-      max-width: 520px;
+      width: 96%;
+      max-width: 480px;
     }
     #main-nav > div {
       flex-wrap: nowrap !important;
-      padding: 0.5rem 0.75rem !important;
+      padding: 0.375rem 0.5rem !important;
     }
     #main-nav .nav-inner {
-      display: flex;
       flex: 1 1 auto;
+      display: flex;
       justify-content: flex-end;
-      gap: 0.1rem;
-      font-size: 10px;
-      white-space: nowrap;
+      align-items: center;
+      gap: 0.05rem;
+      font-size: 8px;
+      letter-spacing: 0.04em;
     }
     @media (min-width: 480px) {
-      #main-nav .nav-inner { font-size: 11px; gap: 0.15rem; }
+      #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
+    }
+    @media (min-width: 640px) {
+      #main-nav .nav-inner { font-size: 10px; gap: 0.15rem; }
+    }
+    @media (min-width: 1024px) {
+      #main-nav .nav-inner { font-size: 11px; gap: 0.2rem; }
     }
     #main-nav .nav-inner a {
-      padding: 0.4rem 0.6rem;
+      padding: 0.3rem 0.5rem;
       border-radius: 999px;
-      font-size: inherit;
-      letter-spacing: 0.05em;
+      white-space: nowrap;
+      transition: color 0.2s;
     }
     #main-nav .nav-inner a:last-child {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      border: 1px solid rgba(var(--color-hairline));
-      background: rgba(var(--color-surface2), 0.5);
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+      border: 1px solid rgb(var(--color-hairline));
+      background: rgba(var(--color-surface2), 0.4);
     }
+    @media (max-width: 380px) {
+      #main-nav .nav-inner a { font-size: 7px !important; padding: 0.2rem 0.3rem !important; }
+      #main-nav .nav-inner a:last-child { padding: 0.2rem 0.4rem !important; }
+    }
+    /* end nav fix */
   </style>
 </head>
 
@@ -155,10 +167,10 @@
     </button>
   </div>
 
-  <!-- FLOATING PILL NAV (fixed with custom styles) -->
+  <!-- FLOATING PILL NAV (fixed) -->
   <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
     <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <a href="index.html" class="flex items-center pl-3 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">← OM</a>
+      <a href="index.html" class="flex items-center pl-2 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">← OM</a>
       <div class="nav-inner">
         <a href="index.html" class="hover:text-ink transition-colors">Home</a>
         <a href="index.html#contact" class="hover:text-ink transition-colors">Contact</a>
