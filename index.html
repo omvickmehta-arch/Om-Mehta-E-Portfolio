@@ -137,7 +137,7 @@
 
   .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
 
-  /* ----- FIXED TOP NAV – no wrap, no clip ----- */
+  /* ----- FIXED TOP NAV – no wrap, no clip, consistent font ----- */
   #main-nav {
     overflow: visible !important;
     width: 96%;
@@ -155,6 +155,7 @@
     gap: 0.05rem;
     font-size: 8px;
     letter-spacing: 0.04em;
+    font-family: 'Inter', sans-serif; /* force sans-serif */
   }
   @media (min-width: 480px) {
     #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
@@ -170,12 +171,20 @@
     border-radius: 999px;
     white-space: nowrap;
     transition: color 0.2s;
+    font-family: inherit;
   }
   #main-nav .nav-inner a:last-child {
     padding-left: 0.6rem;
     padding-right: 0.6rem;
     border: 1px solid rgb(var(--color-hairline));
     background: rgba(var(--color-surface2), 0.4);
+  }
+  #main-nav .om-link {
+    font-family: 'Inter', sans-serif; /* consistent */
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
   @media (max-width: 380px) {
     #main-nav .nav-inner a { font-size: 7px !important; padding: 0.2rem 0.3rem !important; }
@@ -206,7 +215,7 @@
   <!-- FLOATING PILL NAV (fixed) -->
   <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
     <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-      <a href="#hero" class="hidden sm:flex items-center pl-2 pr-2 font-mono text-[11px] tracking-widest text-gold whitespace-nowrap">OM</a>
+      <a href="#hero" class="om-link hidden sm:flex items-center text-gold whitespace-nowrap">OM</a>
       <div class="nav-inner">
         <a href="#experience" class="nav-link hover:text-ink transition-colors">Exp</a>
         <a href="#leadership" class="nav-link hover:text-ink transition-colors">Lead</a>
