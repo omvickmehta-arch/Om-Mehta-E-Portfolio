@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>My Thoughts — Om Mehta</title>
-<meta name="description" content="Om Mehta's blog — notes on finance, school, and everything in between.">
+<meta name="description" content="Om Mehta's blog — notes on finance, school, and everything in between." />
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -41,6 +41,9 @@
     var stored = localStorage.getItem('om-theme');
     var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     if (theme === 'light') document.documentElement.classList.add('light');
+    if (localStorage.getItem('om-reduced-motion') === 'true') {
+      document.documentElement.classList.add('no-motion');
+    }
   })();
 </script>
 
@@ -66,10 +69,28 @@
     --color-gain: 47 110 79;
   }
   html { scroll-behavior: smooth; }
+
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   }
+  html.no-motion {
+    scroll-behavior: auto !important;
+  }
+  html.no-motion * {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    transform: none !important;
+  }
+  html.no-motion .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html.no-motion .card-hover:hover {
+    transform: none !important;
+  }
+
   .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .reveal.is-visible { opacity: 1; transform: translateY(0); }
   .card-hover { transition: transform 0.35s ease, border-color 0.35s ease; }
@@ -79,25 +100,31 @@
   .post-body p { margin-bottom: 1.1em; line-height: 1.75; }
   .hidden-view { display: none; }
   .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
+  #main-nav { overflow: visible; }
 </style>
 </head>
 
 <body class="bg-base text-ink font-sans antialiased">
 
-  <!-- THEME TOGGLE -->
-  <button id="theme-toggle" aria-label="Toggle light and dark theme" class="fixed top-5 right-5 z-50 w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors">
-    <svg id="icon-sun" class="theme-toggle-icon w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-    </svg>
-    <svg id="icon-moon" class="theme-toggle-icon w-4 h-4 text-gold hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </button>
+  <!-- THEME & MOTION TOGGLES -->
+  <div class="fixed top-5 right-5 z-50 flex flex-col gap-2 items-end">
+    <button id="theme-toggle" aria-label="Toggle light and dark theme" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors">
+      <svg id="icon-sun" class="theme-toggle-icon w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+      <svg id="icon-moon" class="theme-toggle-icon w-4 h-4 text-gold hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+    <button id="motion-toggle" aria-label="Disable animations and transitions" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors text-xs font-mono text-muted">
+      <span id="motion-icon" class="text-[11px]">⟳</span>
+    </button>
+  </div>
 
   <!-- FLOATING PILL NAV -->
-  <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
-    <div class="flex items-center justify-between gap-1 rounded-full border border-hairline bg-surface/80 backdrop-blur-md px-2 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-md">
+    <div class="flex items-center justify-between gap-1 rounded-full border border-hairline bg-surface/80 backdrop-blur-md px-3 py-2 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
       <a href="index.html" class="flex items-center pl-3 pr-2 font-mono text-[11px] tracking-widest text-gold">← OM</a>
       <div class="flex flex-1 justify-end gap-1 font-mono text-[10.5px] sm:text-[11px] tracking-widest uppercase text-muted">
         <a href="index.html" class="px-2.5 py-2 rounded-full hover:text-ink transition-colors">Home</a>
@@ -131,7 +158,6 @@
   <main id="post-view" class="px-6 sm:px-10 lg:px-20 pb-28 hidden-view">
     <div class="max-w-3xl mx-auto">
       <button id="back-to-list" class="font-mono text-[11px] text-muted hover:text-gold transition-colors uppercase tracking-widest mb-10">← All posts</button>
-
       <p id="post-date" class="font-mono text-[11px] text-gold uppercase tracking-widest mb-3"></p>
       <h1 id="post-title" class="font-display text-3xl sm:text-4xl text-ink mb-4 leading-tight"></h1>
       <div id="post-tags" class="flex flex-wrap gap-2 mb-8"></div>
@@ -139,51 +165,26 @@
     </div>
   </main>
 
-  <!-- CONTACT SECTION (replicated from index.html) -->
+  <!-- CONTACT SECTION (replicated from index) -->
   <section id="contact" class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-20">
     <div class="max-w-3xl mx-auto">
       <div class="reveal grid lg:grid-cols-[1.3fr_1fr] gap-10 items-start">
         <div>
           <h2 class="font-display text-3xl sm:text-4xl text-ink mb-4">Let's talk about what's next.</h2>
-          <p class="text-muted max-w-md leading-relaxed">
-            I love the idea of making dreams possible — whether that's growing and acquiring companies or building out a portfolio — and using numbers to get there. My biggest pull is toward Corporate Development and Asset Management, but I'm genuinely open to any path in finance. Internships, analyst tracks, or just a quick call — I'd love to talk.
-          </p>
+          <p class="text-muted max-w-md leading-relaxed">I love the idea of making dreams possible — whether that's growing and acquiring companies or building out a portfolio — and using numbers to get there. My biggest pull is toward Corporate Development and Asset Management, but I'm genuinely open to any path in finance. Internships, analyst tracks, or just a quick call — I'd love to talk.</p>
           <div class="flex flex-wrap gap-3 mt-7">
-            <a href="mailto:Omvickmehta@gmail.com" class="inline-flex items-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3.5 rounded-full hover:bg-gold transition-colors">
-              Email Me
-            </a>
-            <a href="tel:+16469261073" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">
-              Call Me
-            </a>
-            <a href="https://www.linkedin.com/in/om--mehta" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">
-              LinkedIn
-            </a>
+            <a href="mailto:Omvickmehta@gmail.com" class="inline-flex items-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3.5 rounded-full hover:bg-gold transition-colors">Email Me</a>
+            <a href="tel:+16469261073" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">Call Me</a>
+            <a href="https://www.linkedin.com/in/om--mehta" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-hairline text-ink font-medium text-sm px-6 py-3.5 rounded-full hover:border-gold transition-colors">LinkedIn</a>
           </div>
         </div>
-
-        <!-- QUICK EMAIL FORM -->
         <div class="border border-hairline rounded-2xl p-6">
           <p class="font-mono text-[11px] text-muted uppercase tracking-widest mb-5">Send a Quick Email</p>
           <form id="quick-email-form" class="space-y-4">
-            <div>
-              <label for="qe-email" class="block font-mono text-[11px] text-muted mb-1.5">Your Email</label>
-              <input type="email" id="qe-email" required placeholder="you@example.com"
-                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors">
-            </div>
-            <div>
-              <label for="qe-subject" class="block font-mono text-[11px] text-muted mb-1.5">Subject</label>
-              <input type="text" id="qe-subject" required placeholder="Let's connect"
-                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors">
-            </div>
-            <div>
-              <label for="qe-message" class="block font-mono text-[11px] text-muted mb-1.5">Message</label>
-              <textarea id="qe-message" required rows="3" placeholder="Say hello..."
-                class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors resize-none"></textarea>
-            </div>
-            <button type="submit"
-              class="w-full inline-flex items-center justify-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3 rounded-full hover:bg-gold transition-colors">
-              Send Email
-            </button>
+            <div><label for="qe-email" class="block font-mono text-[11px] text-muted mb-1.5">Your Email</label><input type="email" id="qe-email" required placeholder="you@example.com" class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors" /></div>
+            <div><label for="qe-subject" class="block font-mono text-[11px] text-muted mb-1.5">Subject</label><input type="text" id="qe-subject" required placeholder="Let's connect" class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors" /></div>
+            <div><label for="qe-message" class="block font-mono text-[11px] text-muted mb-1.5">Message</label><textarea id="qe-message" required rows="3" placeholder="Say hello..." class="w-full bg-surface2 border border-hairline rounded-lg px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:border-gold outline-none transition-colors resize-none"></textarea></div>
+            <button type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-ink text-base font-medium text-sm px-6 py-3 rounded-full hover:bg-gold transition-colors">Send Email</button>
             <p class="text-[11px] text-muted leading-relaxed">Opens your email app, addressed to Omvickmehta@gmail.com, with everything filled in.</p>
           </form>
         </div>
@@ -199,10 +200,10 @@
   </footer>
 
   <script>
-    // Categories (same as compose.html)
+    // --- Same TAGS as compose.html ---
     var TAGS = ["Finance", "Career & Internships", "Leadership", "Life & Interests"];
 
-    // BLOG POSTS — start with an empty array (blank slate)
+    // --- Empty posts array (no posts yet) ---
     var posts = [];
 
     var activeTag = 'All';
@@ -235,6 +236,11 @@
         return p.pinned || activeTag === 'All' || (p.tags || []).indexOf(activeTag) !== -1;
       });
 
+      if (visible.length === 0) {
+        list.innerHTML = '<p class="text-muted text-sm font-mono">No posts yet.</p>';
+        return;
+      }
+
       visible.forEach(function (post) {
         var tagChips = (post.tags || []).map(function (t) {
           return '<span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">' + t + '</span>';
@@ -261,10 +267,6 @@
         list.appendChild(card);
       });
 
-      if (visible.length === 0) {
-        list.innerHTML = '<p class="text-muted text-sm font-mono">No posts yet. Head to <a href="compose.html" class="text-gold hover:underline">compose</a> to write your first one.</p>';
-      }
-
       requestAnimationFrame(function () {
         document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
       });
@@ -273,18 +275,14 @@
     function openPost(id) {
       var post = posts.filter(function (p) { return p.id === id; })[0];
       if (!post) return;
-
       document.getElementById('post-list-view').classList.add('hidden-view');
       document.getElementById('post-view').classList.remove('hidden-view');
-
       document.getElementById('post-date').textContent = post.date;
       document.getElementById('post-title').textContent = post.title;
-
       var tagsEl = document.getElementById('post-tags');
       tagsEl.innerHTML = (post.tags || []).map(function (t) {
         return '<span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">' + t + '</span>';
       }).join('');
-
       var bodyEl = document.getElementById('post-body');
       bodyEl.innerHTML = '';
       post.body.forEach(function (para) {
@@ -292,7 +290,6 @@
         p.textContent = para;
         bodyEl.appendChild(p);
       });
-
       window.scrollTo({ top: 0, behavior: 'auto' });
       history.replaceState(null, '', '#' + post.id);
     }
@@ -305,27 +302,26 @@
 
     document.getElementById('back-to-list').addEventListener('click', closePost);
 
+    // --- Initial render ---
     renderTagFilter();
     renderPostList();
 
-    // Deep-link support
+    // --- Deep-link support ---
     var initialHash = window.location.hash.replace('#', '');
     if (initialHash && posts.some(function (p) { return p.id === initialHash; })) {
       openPost(initialHash);
     }
 
-    // Theme toggle
+    // --- Theme toggle ---
     var themeBtn = document.getElementById('theme-toggle');
     var iconSun = document.getElementById('icon-sun');
     var iconMoon = document.getElementById('icon-moon');
-
     function reflectIcon() {
       var isLight = document.documentElement.classList.contains('light');
       iconSun.classList.toggle('hidden', isLight);
       iconMoon.classList.toggle('hidden', !isLight);
     }
     reflectIcon();
-
     if (themeBtn) {
       themeBtn.addEventListener('click', function () {
         var isLight = document.documentElement.classList.toggle('light');
@@ -333,7 +329,6 @@
         reflectIcon();
       });
     }
-
     var systemPref = window.matchMedia('(prefers-color-scheme: light)');
     systemPref.addEventListener('change', function (e) {
       if (localStorage.getItem('om-theme')) return;
@@ -341,7 +336,26 @@
       reflectIcon();
     });
 
-    // Quick email form (same as index)
+    // --- Motion toggle ---
+    var motionBtn = document.getElementById('motion-toggle');
+    var motionIcon = document.getElementById('motion-icon');
+    function reflectMotion() {
+      var isReduced = document.documentElement.classList.contains('no-motion');
+      motionIcon.style.opacity = isReduced ? '0.5' : '1';
+    }
+    reflectMotion();
+    if (motionBtn) {
+      motionBtn.addEventListener('click', function () {
+        var isReduced = document.documentElement.classList.toggle('no-motion');
+        localStorage.setItem('om-reduced-motion', String(isReduced));
+        reflectMotion();
+        if (isReduced) {
+          document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
+        }
+      });
+    }
+
+    // --- Quick email form ---
     var quickForm = document.getElementById('quick-email-form');
     if (quickForm) {
       quickForm.addEventListener('submit', function (e) {
@@ -350,13 +364,12 @@
         var subject = document.getElementById('qe-subject').value.trim();
         var message = document.getElementById('qe-message').value.trim();
         var body = message + '\n\n— From: ' + fromEmail;
-        var mailto = 'mailto:Omvickmehta@gmail.com'
-          + '?subject=' + encodeURIComponent(subject)
-          + '&body=' + encodeURIComponent(body);
+        var mailto = 'mailto:Omvickmehta@gmail.com' +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
         window.location.href = mailto;
       });
     }
   </script>
-
 </body>
 </html>
