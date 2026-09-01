@@ -101,7 +101,7 @@
     .hidden-view { display: none; }
     .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
 
-    /* ----- FIXED TOP NAV (consistent font) ----- */
+    /* ----- FIXED TOP NAV – all monospace ----- */
     #main-nav {
       overflow: visible !important;
       width: 96%;
@@ -119,7 +119,7 @@
       gap: 0.05rem;
       font-size: 8px;
       letter-spacing: 0.04em;
-      font-family: 'Inter', sans-serif;
+      font-family: 'IBM Plex Mono', monospace;
     }
     @media (min-width: 480px) {
       #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
@@ -144,7 +144,7 @@
       background: rgba(var(--color-surface2), 0.4);
     }
     #main-nav .om-link {
-      font-family: 'Inter', sans-serif;
+      font-family: 'IBM Plex Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.05em;
       padding-left: 0.5rem;
@@ -176,7 +176,7 @@
     </button>
   </div>
 
-  <!-- FLOATING PILL NAV (fixed) -->
+  <!-- FLOATING PILL NAV (all monospace) -->
   <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
     <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
       <a href="index.html" class="om-link text-gold whitespace-nowrap">← OM</a>
