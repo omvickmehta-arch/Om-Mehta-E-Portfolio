@@ -100,8 +100,8 @@
 
     /* Hero & Visual-First Layout */
     .hero-stat { font-size: clamp(2.5rem, 8vw, 4rem); line-height: 1; font-weight: 700; }
-    .chart-lg { height: 400px; margin: 2rem 0; }
-    .chart-sm { height: 280px; margin: 1.5rem 0; }
+    .chart-lg { height: 420px; margin: 2rem 0; padding: 1.5rem; background: rgba(var(--color-surface2), 0.2); border-radius: 0.75rem; border: 1px solid rgb(var(--color-hairline)); }
+    .chart-sm { height: 300px; margin: 1.5rem 0; padding: 1.5rem; background: rgba(var(--color-surface2), 0.2); border-radius: 0.75rem; border: 1px solid rgb(var(--color-hairline)); }
     .flow-arrow { font-size: 2rem; color: rgb(var(--color-gold)); text-align: center; margin: 1rem 0; }
 
     .stat-pill {
@@ -125,6 +125,28 @@
     }
     .flow-box h3 { color: rgb(var(--color-ink)); font-size: 1.1rem; margin-bottom: 0.5rem; }
     .flow-box p { color: rgb(var(--color-muted)); font-size: 0.95rem; line-height: 1.6; }
+
+    /* Chart legend styling */
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgb(var(--color-hairline));
+      justify-content: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+    }
 
     /* ----- FIXED TOP NAV ----- */
     #main-nav {
@@ -228,9 +250,14 @@
       <!-- SECTION 1: THE STARTING POINT -->
       <section class="mb-20">
         <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Where wealth sits today</h2>
-        <p class="text-muted mb-6">Of the roughly 5.7 billion adults globally, only 1.5% hold net assets above USD 1 million, yet this thin slice — some 57.5 million people — controls a disproportionate and growing share of global wealth.<sup><a href="#cite-1" class="citation">1</a></sup></p>
-        <div class="chart-lg">
+        <p class="text-muted mb-6">Of the roughly 5.7 billion adults globally, only 1.5% hold net assets above $1 million. That tiny sliver — 57.5 million people — controls most of the world's wealth.<sup><a href="#cite-1" class="citation">1</a></sup></p>
+        <div class="chart-sm">
           <canvas id="wealthDistribution"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>Top 1.5% (HNWI)</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: rgb(76, 140, 107);"></div> <span>Next 15% (Millionaires)</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: rgba(139, 147, 163, 0.5);"></div> <span>Rest of world</span></div>
+          </div>
         </div>
         <p class="text-center font-mono text-xs text-muted mt-2"><strong>Source:</strong> UBS Global Wealth Report 2026.</p>
       </section>
@@ -238,85 +265,117 @@
       <!-- SECTION 2: THE DIVERGENCE -->
       <section class="mb-20">
         <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">The age-wealth gap (1983–2022)</h2>
-        <p class="text-muted mb-6">Every age group below 75 has lost ground relative to the national average household net worth over the past 39 years — while households 75 and older have gained sharply.<sup><a href="#cite-2" class="citation">2</a></sup></p>
+        <p class="text-muted mb-6">Here's what happened: older Americans got richer relative to everyone else. People 75+ went from having about average wealth (1.05×) to having 1.55× the average. People under 35 went the opposite direction — from 0.21× down to 0.16×.<sup><a href="#cite-2" class="citation">2</a></sup></p>
         <div class="flow-arrow">↓</div>
         <div class="chart-lg">
           <canvas id="ageWealthGap"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>People 75+</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: rgb(200, 100, 100);"></div> <span>People under 35</span></div>
+          </div>
         </div>
-        <p class="text-center font-mono text-xs text-muted mt-2"><strong>Source:</strong> Wolff (NBER).</p>
+        <p class="text-center font-mono text-xs text-muted mt-2"><strong>What this means:</strong> Older people's wealth grew. Younger people's wealth didn't keep up with inflation or the overall economy.</p>
         
         <div class="grid grid-cols-2 gap-4 mt-10">
           <div class="stat-pill">
             <div class="stat-pill-value">1.55×</div>
-            <div class="stat-pill-label">75+ vs avg</div>
+            <div class="stat-pill-label">75+ wealth<br/>vs average</div>
           </div>
           <div class="stat-pill">
             <div class="stat-pill-value">0.16×</div>
-            <div class="stat-pill-label">Under-35 vs avg</div>
+            <div class="stat-pill-label">Under-35 wealth<br/>vs average</div>
           </div>
         </div>
       </section>
 
       <!-- SECTION 3: WHAT THEY OWN -->
       <section class="mb-20">
-        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Portfolio mismatch: where the money actually is</h2>
-        <p class="text-muted mb-6">The 75+ cohort holds 31.2% of assets in stocks with minimal debt. Under-35 households hold 46.5% in housing with 65.4% debt-to-net-worth ratio.<sup><a href="#cite-2" class="citation">2</a></sup></p>
+        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Why this happened: what they actually own</h2>
+        <p class="text-muted mb-6">The reason is simple: older people own a lot of stocks. Younger people own a lot of mortgages. Look at the breakdown.<sup><a href="#cite-2" class="citation">2</a></sup></p>
         <div class="grid sm:grid-cols-2 gap-6 mb-10">
-          <div class="chart-sm">
-            <canvas id="portfolioUnder35"></canvas>
+          <div>
+            <p class="text-center font-mono text-sm font-semibold text-ink mb-3">People Under 35</p>
+            <div class="chart-sm">
+              <canvas id="portfolioUnder35"></canvas>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-color" style="background: rgb(200, 100, 100);"></div> <span>Houses: 46.5%</span></div>
+                <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>Stocks: 10.1%</span></div>
+                <div class="legend-item"><div class="legend-color" style="background: rgba(139, 147, 163, 0.4);"></div> <span>Other: 43.4%</span></div>
+              </div>
+            </div>
           </div>
-          <div class="chart-sm">
-            <canvas id="portfolio75Plus"></canvas>
+          <div>
+            <p class="text-center font-mono text-sm font-semibold text-ink mb-3">People 75+</p>
+            <div class="chart-sm">
+              <canvas id="portfolio75Plus"></canvas>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-color" style="background: rgb(200, 100, 100);"></div> <span>Houses: 22%</span></div>
+                <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>Stocks: 31.2%</span></div>
+                <div class="legend-item"><div class="legend-color" style="background: rgba(139, 147, 163, 0.4);"></div> <span>Other: 46.8%</span></div>
+              </div>
+            </div>
           </div>
         </div>
         
         <div class="flow-box mt-8">
           <h3>The transfer problem</h3>
-          <p><strong>What's leaving:</strong> Concentrated equities, low-cost basis, debt-free (75+ cohort)</p>
-          <p><strong>Where it's going:</strong> Housing-debt-heavy portfolios with minimal stock exposure (under-35 cohort)</p>
-          <p style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline));"><strong>The opportunity:</strong> Inheritors will liquidate and reallocate. Fast.</p>
+          <p><strong>What's leaving:</strong> $30 trillion in stocks, mostly owned debt-free by older Americans</p>
+          <p><strong>Where it's going:</strong> To younger Americans who own houses and debt, not stocks</p>
+          <p style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline));"><strong>What happens next:</strong> Young inheritors will sell concentrated stocks and buy different things — alternative markets, crypto, etc.</p>
         </div>
       </section>
 
       <!-- SECTION 4: HOW CONCENTRATED THE MARKET IS -->
       <section class="mb-20">
-        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">The market they're entering (dangerously concentrated)</h2>
-        <p class="text-muted mb-6">The S&P 500 top 10 now account for 40.7% of the index — more than double the 18–23% average from 1990–2015.<sup><a href="#cite-3" class="citation">3</a></sup></p>
+        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">The stock market is dangerously concentrated</h2>
+        <p class="text-muted mb-6">The top 10 companies in the S&P 500 used to be about 20% of the index. Now they're 41%. This matters because when billions in inherited stock hits this market, it can move prices hard.<sup><a href="#cite-3" class="citation">3</a></sup></p>
         <div class="chart-lg">
           <canvas id="marketConcentration"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>Top 10 S&P 500 weight %</span></div>
+          </div>
         </div>
-        <p class="text-center font-mono text-xs text-muted mt-2"><strong>Source:</strong> VanEck (2026).</p>
+        <p class="text-center font-mono text-xs text-muted mt-2"><strong>What this means:</strong> The market is top-heavy. A lot of value sits in just 10 stocks.</p>
         
         <div class="stat-pill" style="margin-top: 1.5rem;">
           <div class="stat-pill-value">40.7%</div>
-          <div class="stat-pill-label">S&P 500 top 10 (2025)</div>
+          <div class="stat-pill-label">S&P 500 top 10<br/>(2025)</div>
         </div>
         <div class="stat-pill">
           <div class="stat-pill-value">18–23%</div>
-          <div class="stat-pill-label">1990–2015 average</div>
+          <div class="stat-pill-label">S&P 500 top 10<br/>(1990–2015)</div>
         </div>
       </section>
 
       <!-- SECTION 5: BITCOIN & ALTERNATIVES EMERGE -->
       <section class="mb-20">
-        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Bitcoin: The alternative gaining traction</h2>
-        <p class="text-muted mb-6">Bitcoin shows 6.21% average monthly returns but with extreme volatility (19.71% standard deviation), making it a high-risk, high-return asset.<sup><a href="#cite-4" class="citation">4</a></sup> By contrast, traditional equities (S&P 500) average 1.08% monthly returns with 5.38% volatility. Younger inheritors exploring alternative stores of value face a structural shift in platform accessibility.</p>
+        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Bitcoin vs stocks: risk and reward</h2>
+        <p class="text-muted mb-6">Bitcoin is the wild card. It makes way more money per month than stocks (6.21% vs 1.08%), but it's also way more volatile. Younger people raised on apps will explore it.<sup><a href="#cite-4" class="citation">4</a></sup></p>
         
         <div class="grid sm:grid-cols-3 gap-6 mb-10">
           <div class="flow-box">
             <h3>Bitcoin</h3>
-            <p><strong>6.21%</strong> avg return / <strong>19.71%</strong> volatility</p>
-            <p style="font-size: 0.85rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgb(var(--color-hairline));">High-risk speculative asset</p>
+            <p style="font-size: 1.3rem; color: rgb(var(--color-gold)); font-weight: 700; margin-top: 0.5rem;">6.21%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">avg monthly return</p>
+            <p style="font-size: 1.1rem; color: rgb(var(--color-ink)); font-weight: 600; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline));">19.71%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">monthly volatility</p>
+            <p style="font-size: 0.75rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline)); color: rgb(var(--color-muted));">Boom or bust</p>
           </div>
           <div class="flow-box">
             <h3>S&P 500</h3>
-            <p><strong>1.08%</strong> avg return / <strong>5.38%</strong> volatility</p>
-            <p style="font-size: 0.85rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgb(var(--color-hairline));">Traditional equity benchmark</p>
+            <p style="font-size: 1.3rem; color: rgb(var(--color-gold)); font-weight: 700; margin-top: 0.5rem;">1.08%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">avg monthly return</p>
+            <p style="font-size: 1.1rem; color: rgb(var(--color-ink)); font-weight: 600; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline));">5.38%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">monthly volatility</p>
+            <p style="font-size: 0.75rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline)); color: rgb(var(--color-muted));">Steady, boring</p>
           </div>
           <div class="flow-box">
             <h3>Invesco QQQ ETF</h3>
-            <p><strong>1.43%</strong> avg return / <strong>4.54%</strong> volatility</p>
-            <p style="font-size: 0.85rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgb(var(--color-hairline));">Balanced via diversification</p>
+            <p style="font-size: 1.3rem; color: rgb(var(--color-gold)); font-weight: 700; margin-top: 0.5rem;">1.43%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">avg monthly return</p>
+            <p style="font-size: 1.1rem; color: rgb(var(--color-ink)); font-weight: 600; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline));">4.54%</p>
+            <p style="font-size: 0.85rem; margin-top: 0.3rem;">monthly volatility</p>
+            <p style="font-size: 0.75rem; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgb(var(--color-hairline)); color: rgb(var(--color-muted));">Balanced</p>
           </div>
         </div>
       </section>
@@ -328,70 +387,74 @@
         <!-- Flow diagram -->
         <div class="space-y-4">
           <div class="flow-box">
-            <h3>① Equities will accelerate (but with limits)</h3>
-            <p>$30T in inherited stock hits a market already at record concentration. Heirs facing capital gains tax will seek diversification.<sup><a href="#cite-1" class="citation">1</a></sup></p>
+            <h3>① Equities will move around (but not all stay in stocks)</h3>
+            <p>$30T in inherited stock needs to go somewhere. Capital gains tax will push heirs to diversify. Some stays in stocks, some goes elsewhere.<sup><a href="#cite-1" class="citation">1</a></sup></p>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-box">
-            <h3>② Alternative markets emerge (Kalshi, prediction markets)</h3>
-            <p>Younger inheritors have zero institutional friction with platforms like Kalshi. Easier onboarding, real-time execution, narrative-driven. Firms that lower the barrier win massive AUM.</p>
+            <h3>② Alternative markets (Kalshi, prediction markets)</h3>
+            <p>Younger people have never used a traditional broker. They'll use Kalshi or similar platforms because it's one click, not three phone calls. The winners capture massive AUM here.</p>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-box">
-            <h3>③ Crypto takes a piece (if regulation permits)</h3>
-            <p>Bitcoin's 6.21% monthly returns attract speculative capital, but extreme volatility keeps it material rather than dominant.<sup><a href="#cite-4" class="citation">4</a></sup> A generation raised on apps will explore it as a portfolio diversifier.</p>
+            <h3>③ Crypto gets a real shot (if regulations don't kill it)</h3>
+            <p>Bitcoin's 6.21% monthly returns will attract some capital. The volatility scares many, but a generation raised on apps will experiment here.<sup><a href="#cite-4" class="citation">4</a></sup></p>
           </div>
           <div class="flow-arrow">↓</div>
           <div class="flow-box">
-            <h3>④ Housing/physical assets lose relative appeal</h3>
-            <p>Younger cohorts are already housing-poor and debt-heavy. Liquid, tradeable assets win. Real estate becomes a lagging asset class for this cohort.</p>
+            <h3>④ Housing loses out</h3>
+            <p>Young inheritors are already house-poor. They're not buying second homes. Liquid, tradeable assets win. Real estate gets less capital.</p>
           </div>
         </div>
       </section>
 
       <!-- SECTION 7: THE BUSINESS OPPORTUNITY -->
       <section class="mb-20">
-        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8 text-center">What firms need to win</h2>
+        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8 text-center">How to win the transfer</h2>
         
         <div class="grid sm:grid-cols-3 gap-6">
           <div class="flow-box">
-            <h3>🎯 Accessibility</h3>
-            <p>Kalshi-style simplicity. One-click entry. Minimal friction.</p>
+            <h3>🎯 Make it simple</h3>
+            <p>One click to start. No forms. No waiting. That's Kalshi.</p>
           </div>
           <div class="flow-box">
-            <h3>📊 Real-time execution</h3>
-            <p>Not quarterly reviews. Inheritors reallocate at speed. Live trading, instant settlement.</p>
+            <h3>📊 Fast execution</h3>
+            <p>Inheritors move money in weeks, not months. Real-time settlement matters.</p>
           </div>
           <div class="flow-box">
-            <h3>🔗 Integration</h3>
-            <p>Connect inheritance flows to first move. API-first UX.</p>
+            <h3>🔗 Meet them where they are</h3>
+            <p>API first. App first. Traditional advisor model loses.</p>
           </div>
         </div>
 
         <div class="flow-box mt-10" style="border-left-color: rgb(var(--color-gain));">
-          <h3>The AUM prize</h3>
-          <p>Capture even 2% of reallocating wealth = <strong>$600B+ in new AUM</strong> within a decade. Firms that can't offer accessibility (traditional advisors) lose that flow.</p>
+          <h3>The money on the table</h3>
+          <p>Even if you capture just 2% of the wealth that gets reallocated = <strong>$600 billion+ in new AUM</strong> over a decade. Traditional brokers can't compete on speed or simplicity. Platforms that are easy win.</p>
         </div>
       </section>
 
       <!-- SECTION 8: HOUSING IMPACT -->
       <section class="mb-20">
-        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Housing gets left behind</h2>
+        <h2 class="font-display text-2xl sm:text-3xl text-ink mb-8">Housing falls behind</h2>
         <div class="chart-lg">
           <canvas id="assetFlows"></canvas>
+          <div class="chart-legend">
+            <div class="legend-item"><div class="legend-color" style="background: rgba(176, 141, 87, 0.5);"></div> <span>Today's allocation</span></div>
+            <div class="legend-item"><div class="legend-color" style="background: rgb(176, 141, 87);"></div> <span>Projected 2035</span></div>
+          </div>
         </div>
-        <p class="text-center font-mono text-xs text-muted mt-2">Projected asset allocation shift as wealth transfers and younger cohorts gain control.</p>
+        <p class="text-center font-mono text-xs text-muted mt-2"><strong>What changes:</strong> Less money in houses. More in stocks and alternatives.</p>
         
         <div class="flow-box" style="border-left-color: rgb(200, 100, 100);">
-          <h3>The housing squeeze</h3>
-          <p>Millennial + Gen-Z inheritors aren't buying second homes with their windfall. They're reallocating to liquid markets where returns are faster and entry is easier. Real estate faces structural headwinds as capital pulls away.</p>
+          <h3>The squeeze on real estate</h3>
+          <p>Inheritors won't buy vacation homes. They'll put money into markets where they can trade fast, see results immediately, and move the capital when they want. Real estate becomes a drag on returns for this cohort.</p>
         </div>
       </section>
 
       <!-- SECTION 9: SOURCES & CAVEATS -->
       <section class="mb-10 border-t border-hairline pt-12">
-        <h2 class="font-display text-xl text-ink mb-6">Data sources & methodology</h2>
-        <p class="text-muted text-sm mb-8">This analysis synthesizes published institutional sources. The visualizations reflect their findings directly. No original modeling has been performed. This is educational material only.</p>
+        <h2 class="font-display text-xl text-ink mb-6">Sources</h2>
+        <p class="text-muted text-sm mb-8">This analysis pulls from four published sources. No original modeling. This is for education only.</p>
         
         <div id="citations" class="space-y-4 font-mono text-sm text-muted">
           <div id="cite-1" class="citation-item p-4 rounded border border-hairline">
@@ -436,101 +499,109 @@
       };
     }
 
-    var chartOptions = {
+    var cleanChartOptions = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { labels: { color: getChartColors().text, font: { size: 12 } } }
+        legend: { display: false },
+        tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', padding: 12, titleFont: { size: 13 }, bodyFont: { size: 12 } }
       },
       scales: {
-        y: { ticks: { color: getChartColors().muted }, grid: { color: 'rgba(139, 147, 163, 0.1)' } },
-        x: { ticks: { color: getChartColors().muted }, grid: { color: 'rgba(139, 147, 163, 0.1)' } }
+        y: { display: true, ticks: { color: getChartColors().muted }, grid: { display: false }, beginAtZero: true },
+        x: { display: true, ticks: { color: getChartColors().muted }, grid: { display: false } }
       }
     };
 
-    // Chart 1: Global Wealth Distribution
+    // Chart 1: Global Wealth Distribution (Pie)
     new Chart(document.getElementById('wealthDistribution'), {
-      type: 'doughnut',
+      type: 'pie',
       data: {
-        labels: ['HNWI (1.5%)', 'Millionaires', 'Middle Class', 'Rest'],
+        labels: ['Top 1.5%', 'Next 15%', 'Rest of World'],
         datasets: [{
-          data: [1.5, 15, 35, 48.5],
-          backgroundColor: [getChartColors().gold, getChartColors().gain, 'rgba(139, 147, 163, 0.5)', 'rgba(139, 147, 163, 0.2)']
+          data: [1.5, 15, 83.5],
+          backgroundColor: [getChartColors().gold, getChartColors().gain, 'rgba(139, 147, 163, 0.3)'],
+          borderColor: 'rgb(var(--color-surface))',
+          borderWidth: 0
         }]
       },
-      options: { ...chartOptions, plugins: { legend: { position: 'bottom', labels: { color: getChartColors().text } } } }
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.label + ': ' + c.parsed + '%'; } } } } }
     });
 
-    // Chart 2: Age-Wealth Gap
+    // Chart 2: Age-Wealth Gap (Line)
     new Chart(document.getElementById('ageWealthGap'), {
       type: 'line',
       data: {
         labels: ['1983', '1989', '1995', '2001', '2007', '2013', '2019', '2022'],
         datasets: [
-          { label: '75+', data: [1.05, 1.08, 1.15, 1.25, 1.35, 1.42, 1.48, 1.55], borderColor: getChartColors().gold, borderWidth: 3, fill: false, tension: 0.4 },
-          { label: 'Under 35', data: [0.21, 0.18, 0.16, 0.12, 0.09, 0.10, 0.08, 0.16], borderColor: getChartColors().loss, borderWidth: 3, fill: false, tension: 0.4 }
+          { label: 'People 75+', data: [1.05, 1.08, 1.15, 1.25, 1.35, 1.42, 1.48, 1.55], borderColor: getChartColors().gold, borderWidth: 4, fill: false, tension: 0.3, pointRadius: 5, pointBackgroundColor: getChartColors().gold, pointBorderColor: 'transparent' },
+          { label: 'People Under 35', data: [0.21, 0.18, 0.16, 0.12, 0.09, 0.10, 0.08, 0.16], borderColor: getChartColors().loss, borderWidth: 4, fill: false, tension: 0.3, pointRadius: 5, pointBackgroundColor: getChartColors().loss, pointBorderColor: 'transparent' }
         ]
       },
-      options: chartOptions
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '×'; } } } } }
     });
 
-    // Chart 3A: Portfolio Under 35
+    // Chart 3A: Portfolio Under 35 (Pie)
     new Chart(document.getElementById('portfolioUnder35'), {
-      type: 'doughnut',
+      type: 'pie',
       data: {
-        labels: ['Housing\n46.5%', 'Stock\n10.1%', 'Other\n43.4%'],
+        labels: ['Houses: 46.5%', 'Stocks: 10.1%', 'Other: 43.4%'],
         datasets: [{
           data: [46.5, 10.1, 43.4],
-          backgroundColor: [getChartColors().loss, getChartColors().gold, 'rgba(139, 147, 163, 0.4)']
+          backgroundColor: [getChartColors().loss, getChartColors().gold, 'rgba(139, 147, 163, 0.3)'],
+          borderColor: 'rgb(var(--color-surface))',
+          borderWidth: 0
         }]
       },
-      options: { ...chartOptions, plugins: { title: { display: true, text: 'Under 35', color: getChartColors().text }, legend: { position: 'bottom' } } }
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.label.split(':')[0] + ': ' + c.parsed + '%'; } } } } }
     });
 
-    // Chart 3B: Portfolio 75+
+    // Chart 3B: Portfolio 75+ (Pie)
     new Chart(document.getElementById('portfolio75Plus'), {
-      type: 'doughnut',
+      type: 'pie',
       data: {
-        labels: ['Housing\n22%', 'Stock\n31.2%', 'Other\n46.8%'],
+        labels: ['Houses: 22%', 'Stocks: 31.2%', 'Other: 46.8%'],
         datasets: [{
           data: [22, 31.2, 46.8],
-          backgroundColor: [getChartColors().loss, getChartColors().gold, 'rgba(139, 147, 163, 0.4)']
+          backgroundColor: [getChartColors().loss, getChartColors().gold, 'rgba(139, 147, 163, 0.3)'],
+          borderColor: 'rgb(var(--color-surface))',
+          borderWidth: 0
         }]
       },
-      options: { ...chartOptions, plugins: { title: { display: true, text: '75+', color: getChartColors().text }, legend: { position: 'bottom' } } }
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.label.split(':')[0] + ': ' + c.parsed + '%'; } } } } }
     });
 
-    // Chart 4: Market Concentration
+    // Chart 4: Market Concentration (Line)
     new Chart(document.getElementById('marketConcentration'), {
       type: 'line',
       data: {
         labels: ['1990', '1995', '2000', '2005', '2010', '2015', '2020', '2025'],
         datasets: [{
-          label: 'S&P 500 Top 10 Weight (%)',
+          label: 'S&P 500 Top 10 Weight',
           data: [18, 17, 22, 19, 18, 20, 26, 40.7],
           borderColor: getChartColors().gold,
-          backgroundColor: 'rgba(176, 141, 87, 0.15)',
-          borderWidth: 3,
+          backgroundColor: 'rgba(176, 141, 87, 0.1)',
+          borderWidth: 4,
           fill: true,
-          tension: 0.4,
+          tension: 0.3,
           pointRadius: 5,
-          pointBackgroundColor: getChartColors().gold
+          pointBackgroundColor: getChartColors().gold,
+          pointBorderColor: 'transparent'
         }]
       },
-      options: chartOptions
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.parsed.y.toFixed(1) + '%'; } } } }, scales: { y: { max: 45 } } }
     });
 
-    // Chart 5: Asset Flows (Projected)
+    // Chart 5: Asset Flows (Grouped Bar)
     new Chart(document.getElementById('assetFlows'), {
       type: 'bar',
       data: {
-        labels: ['Housing', 'Equities', 'Alt Markets\n(Kalshi)', 'Crypto', 'Other'],
+        labels: ['Housing', 'Equities', 'Alt Markets', 'Crypto', 'Other'],
         datasets: [
-          { label: '2025 (Current)', data: [35, 25, 2, 1, 37], backgroundColor: 'rgba(176, 141, 87, 0.5)' },
-          { label: '2035 (Projected)', data: [25, 35, 8, 4, 28], backgroundColor: getChartColors().gold }
+          { label: "Today's allocation", data: [35, 25, 2, 1, 37], backgroundColor: 'rgba(176, 141, 87, 0.5)', barPercentage: 0.7 },
+          { label: 'Projected 2035', data: [25, 35, 8, 4, 28], backgroundColor: getChartColors().gold, barPercentage: 0.7 }
         ]
       },
-      options: chartOptions
+      options: { ...cleanChartOptions, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return c.dataset.label + ': ' + c.parsed.y + '%'; } } } }, scales: { y: { max: 40 } } }
     });
 
     // Citation click handlers
@@ -540,15 +611,11 @@
         var targetId = link.getAttribute('href').substring(1);
         var targetEl = document.getElementById(targetId);
         if (targetEl) {
-          // Remove all previous highlights
           document.querySelectorAll('.citation-item.highlighted').forEach(function(el) {
             el.classList.remove('highlighted');
           });
-          // Add highlight to clicked citation
           targetEl.classList.add('highlighted');
-          // Scroll to it
           targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Remove highlight after 2 seconds
           setTimeout(function() {
             targetEl.classList.remove('highlighted');
           }, 2000);
