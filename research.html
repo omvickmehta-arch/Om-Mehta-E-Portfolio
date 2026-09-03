@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research — Om Mehta</title>
+  <meta name="description" content="Om Mehta's research notes — long-form analysis on finance and markets." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            base: 'rgb(var(--color-base) / <alpha-value>)',
+            surface: 'rgb(var(--color-surface) / <alpha-value>)',
+            surface2: 'rgb(var(--color-surface2) / <alpha-value>)',
+            hairline: 'rgb(var(--color-hairline) / <alpha-value>)',
+            ink: 'rgb(var(--color-ink) / <alpha-value>)',
+            muted: 'rgb(var(--color-muted) / <alpha-value>)',
+            gold: 'rgb(var(--color-gold) / <alpha-value>)',
+            gain: 'rgb(var(--color-gain) / <alpha-value>)',
+          },
+          fontFamily: {
+            display: ['"Fraunces"', 'serif'],
+            sans: ['"Inter"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <script>
+    (function () {
+      var stored = localStorage.getItem('om-theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      if (theme === 'light') document.documentElement.classList.add('light');
+    })();
+  </script>
+
+  <style>
+    :root {
+      --color-base: 18 22 29;
+      --color-surface: 26 32 41;
+      --color-surface2: 31 39 51;
+      --color-hairline: 42 49 64;
+      --color-ink: 236 238 243;
+      --color-muted: 139 147 163;
+      --color-gold: 176 141 87;
+      --color-gain: 76 140 107;
+    }
+    html.light {
+      --color-base: 247 246 242;
+      --color-surface: 255 255 255;
+      --color-surface2: 241 239 234;
+      --color-hairline: 222 219 210;
+      --color-ink: 24 27 33;
+      --color-muted: 101 105 116;
+      --color-gold: 150 111 53;
+      --color-gain: 47 110 79;
+    }
+    html { scroll-behavior: smooth; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    }
+
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    ::selection { background: rgb(var(--color-gold)); color: rgb(var(--color-base)); }
+    :focus-visible { outline: 2px solid rgb(var(--color-gold)); outline-offset: 3px; }
+    .theme-toggle-icon { transition: opacity 0.2s ease, transform 0.3s ease; }
+
+    .post-body p { margin-bottom: 1.1em; line-height: 1.75; }
+    .post-body h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      color: rgb(var(--color-ink));
+      margin-top: 2.2em;
+      margin-bottom: 0.7em;
+      line-height: 1.3;
+    }
+    .post-body h3 {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgb(var(--color-gold));
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+    }
+    .post-body ul, .post-body ol {
+      margin: 0 0 1.3em 0;
+      padding-left: 1.3em;
+      line-height: 1.75;
+    }
+    .post-body ul { list-style: none; padding-left: 0; }
+    .post-body ul li {
+      position: relative;
+      padding-left: 1.4em;
+      margin-bottom: 0.6em;
+    }
+    .post-body ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: rgb(var(--color-gold));
+    }
+    .post-body ol { list-style: decimal; }
+    .post-body ol li { margin-bottom: 0.6em; padding-left: 0.3em; }
+    .post-body strong { color: rgb(var(--color-ink)); font-weight: 600; }
+    .post-body em { font-style: italic; color: rgb(var(--color-muted)); }
+    .post-body hr {
+      border: none;
+      height: 1px;
+      background: rgb(var(--color-hairline));
+      margin: 2.5em 0;
+    }
+    .lede {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgb(var(--color-muted));
+      line-height: 1.6;
+      border-left: 2px solid rgb(var(--color-gold));
+      padding-left: 1.1rem;
+    }
+
+    /* Chart & Data Visualization Styles */
+    .chart-container {
+      position: relative;
+      height: 320px;
+      margin: 2em 0;
+      padding: 1.5em;
+      border: 1px solid rgb(var(--color-hairline));
+      border-radius: 0.75rem;
+      background: rgba(var(--color-surface2), 0.3);
+    }
+    .chart-caption {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: rgb(var(--color-muted));
+      margin-top: 1em;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.95rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .data-table th {
+      background: rgba(var(--color-surface2), 0.5);
+      color: rgb(var(--color-ink));
+      padding: 0.75em 1em;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid rgb(var(--color-hairline));
+    }
+    .data-table td {
+      padding: 0.75em 1em;
+      border-bottom: 1px solid rgb(var(--color-hairline));
+      color: rgb(var(--color-muted));
+    }
+    .data-table tr:hover { background: rgba(var(--color-surface2), 0.3); }
+    .stat-box {
+      display: inline-block;
+      background: rgba(var(--color-surface2), 0.4);
+      border-left: 3px solid rgb(var(--color-gold));
+      padding: 1.2em;
+      margin: 1em 0;
+      border-radius: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      color: rgb(var(--color-gold));
+      font-weight: 600;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgb(var(--color-muted));
+      margin-top: 0.3em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ----- FIXED TOP NAV – all monospace ----- */
+    #main-nav {
+      overflow: visible !important;
+      width: 96%;
+      max-width: 480px;
+    }
+    #main-nav > div {
+      flex-wrap: nowrap !important;
+      padding: 0.375rem 0.5rem !important;
+    }
+    #main-nav .nav-inner {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.05rem;
+      font-size: 8px;
+      letter-spacing: 0.04em;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    @media (min-width: 480px) {
+      #main-nav .nav-inner { font-size: 9px; gap: 0.1rem; }
+    }
+    @media (min-width: 640px) {
+      #main-nav .nav-inner { font-size: 10px; gap: 0.15rem; }
+    }
+    @media (min-width: 1024px) {
+      #main-nav .nav-inner { font-size: 11px; gap: 0.2rem; }
+    }
+    #main-nav .nav-inner a {
+      padding: 0.3rem 0.5rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: color 0.2s;
+      font-family: inherit;
+    }
+    #main-nav .nav-inner a:last-child {
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+      border: 1px solid rgb(var(--color-hairline));
+      background: rgba(var(--color-surface2), 0.4);
+    }
+    #main-nav .om-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    @media (max-width: 380px) {
+      #main-nav .nav-inner a { font-size: 7px !important; padding: 0.2rem 0.3rem !important; }
+      #main-nav .nav-inner a:last-child { padding: 0.2rem 0.4rem !important; }
+    }
+    /* end nav fix */
+  </style>
+</head>
+
+<body class="bg-base text-ink font-sans antialiased">
+
+  <!-- THEME TOGGLE -->
+  <div class="fixed top-5 right-5 z-50 flex flex-col gap-2 items-end">
+    <button id="theme-toggle" aria-label="Toggle light and dark theme" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors">
+      <svg id="icon-sun" class="theme-toggle-icon w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+      <svg id="icon-moon" class="theme-toggle-icon w-4 h-4 text-gold hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- FLOATING PILL NAV (all monospace) -->
+  <nav id="main-nav" class="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+    <div class="flex items-center justify-between rounded-full border border-hairline bg-surface/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+      <a href="index.html" class="om-link text-gold whitespace-nowrap">← OM</a>
+      <div class="nav-inner">
+        <a href="index.html" class="hover:text-ink transition-colors">Home</a>
+        <a href="thoughts.html" class="hover:text-ink transition-colors">Thoughts</a>
+        <a href="index.html#contact" class="hover:text-ink transition-colors">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="px-6 sm:px-10 lg:px-20 pt-32 pb-10">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-mono text-[11px] tracking-[0.25em] text-gold uppercase mb-6">Om Mehta — Research</p>
+      <h1 class="font-display text-3xl sm:text-4xl leading-tight text-ink mb-4">The Great Wealth Transfer: What Moves, From Whom, Into What</h1>
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">Finance</span>
+        <span class="text-[10px] font-mono uppercase tracking-widest text-gold border border-gold/40 rounded-full px-2.5 py-1">Wealth &amp; Markets</span>
+        <span class="font-mono text-[11px] text-muted">Sep 2026 — Educational Analysis</span>
+      </div>
+      <p class="lede">
+        A synthesis of three sources: UBS's Global Wealth Report 2026, VanEck's "The Market Concentration You Didn't Choose" (26 August 2026), and Edward Wolff's NBER working paper "The Extraordinary Rise in the Wealth of Older American Households" (No. 34131, August 2025).
+      </p>
+    </div>
+  </header>
+
+  <!-- BODY -->
+  <main class="px-6 sm:px-10 lg:px-20 pb-24">
+    <div class="max-w-3xl mx-auto post-body text-muted text-base">
+
+      <h3>Executive summary</h3>
+      <p>Three independent bodies of data, read together, point to the same structural story. Older households — particularly those 75 and over — have pulled dramatically ahead of every younger age cohort in relative wealth over the last four decades, and the way they got there was not real estate. It was equities. At the same time, the market those equities sit in has become more concentrated than at any point in the available record, and the wealth-management industry itself acknowledges that a "Great Wealth Transfer" is already shaping asset allocation decisions. What has not yet happened — and what none of these three sources directly examines — is <em>where</em> that wealth goes once it changes hands, at a moment when the investment menu available to a 30- or 40-year-old heir looks nothing like the one available to their parents in 1989. That gap is the most useful thing this exercise can flag, not paper over.</p>
+
+      <h2>1. Where global wealth sits today</h2>
+      <p>UBS's Global Wealth Report 2026 estimates personal wealth grew 10.8% globally in 2025, but the distribution behind that number is narrow. Of the roughly 5.7 billion adults in the 56 markets UBS tracks, only 1.5% hold net assets above USD 1 million, yet that thin slice — some 57.5 million people — controls a disproportionate and growing share of global wealth. The United States alone accounts for over 40% of the world's USD millionaires, and North America plus Greater China together hold more than half. The report's newer contribution this year is a look one rung further up: the roughly seven million people worldwide holding between USD 5 million and USD 100 million, over four million of whom are in the United States. This segment has been expanding at double-digit compound annual rates in several markets, with China's growth exceeding 20% a year and even touching 30% in the top of that range.</p>
+      
+      <div class="chart-container">
+        <canvas id="wealthDistributionChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> UBS Global Wealth Report 2026. Shows the concentration of millionaires by region: North America's share of global high-net-worth individuals significantly exceeds population proportion.</p>
+      </div>
+
+      <p>Wealth inequality, measured by the Gini coefficient, varies enormously by market — from 0.38 in Slovakia to 0.82 in the UAE and Russia — but the pattern that matters for this report is not cross-country dispersion. It is what has happened <em>within</em> a single country, across age, over time.</p>
+
+      <h2>2. Why a transfer is coming: the age-wealth reversal</h2>
+      <p>Wolff's NBER paper is the clearest evidence of the mechanism. Using the Federal Reserve's Survey of Consumer Finances from 1983 to 2022, he shows that every age group below 75 has <em>lost</em> ground relative to the national average household net worth over that 39-year span — while households 75 and older have gained sharply. Their wealth relative to the overall mean rose from roughly parity in 1983 (1.05×) to 1.55× the average by 2022. Households under 35, by contrast, saw their relative position fall from 0.21× the average in 1983 to 0.16× in 2022 (having troughed even lower, at 0.08×, in 2019).</p>
+
+      <div class="chart-container">
+        <canvas id="ageWealthChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> Edward Wolff, NBER Working Paper No. 34131. Relative wealth by age cohort (normalized to national average = 1.0). The 75+ cohort has nearly doubled relative wealth while younger cohorts have declined sharply.</p>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-value">1.55×</div>
+        <div class="stat-label">75+ wealth vs. national average (2022)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">0.16×</div>
+        <div class="stat-label">Under-35 wealth vs. national average (2022)</div>
+      </div>
+
+      <p>This is the opposite of what simple financial theory would predict. Younger households carry far more leverage, and leverage amplifies returns when asset prices rise — Wolff calculates that the "leverage effect" alone should have pushed the wealth of the youngest cohort up by 3.5 percentage points a year relative to gross-asset returns, against only 0.2 points for the oldest group. Something else overwhelmed that mathematical advantage.</p>
+      
+      <p>Wolff's decomposition isolates the cause. For the 75-and-over cohort, the single largest contributor to their outsized relative wealth gain was the value of directly and indirectly held stock relative to the national average — a ratio that rose from 0.56 in 1989 to 3.47 by 2022, alone explaining more than the entire relative wealth gain when isolated as a factor. Rising net home equity contributed a further 38%, and a decline in mortgage debt relative to the national average contributed another 35%. For the youngest cohort, the mirror image applies: a surge in mortgage debt relative to the national average was the dominant force pulling their relative net worth down, swamping any gains from a rising, if still comparatively modest, homeownership rate.</p>
+
+      <div class="chart-container">
+        <canvas id="portfolioCompositionChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> Wolff (2022), Survey of Consumer Finances. Asset composition by age group. The 75+ cohort holds 3.47× the national average stock exposure while under-35 households are dominated by housing debt and primary residence holdings.</p>
+      </div>
+
+      <p>The portfolio snapshot for 2022 makes the underlying asymmetry concrete. Households under 35 hold 46.5% of their gross assets in a primary residence and just 10.1% in corporate stock, financial securities, mutual funds and trusts combined; their debt-to-net-worth ratio sits at 65.4%. Households 75 and over hold only 22.0% of assets in housing but 31.2% in stock and financial securities, carrying a debt-to-net-worth ratio of just 3.2%. The oldest Americans are, in short, sitting on a portfolio that is heavily weighted toward the exact asset class that has compounded the fastest and carries almost no offsetting debt.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Portfolio Metric</th>
+            <th>Under 35</th>
+            <th>75+</th>
+            <th>Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Primary Residence (%)</td>
+            <td>46.5%</td>
+            <td>22.0%</td>
+            <td>0.47×</td>
+          </tr>
+          <tr>
+            <td>Stock &amp; Securities (%)</td>
+            <td>10.1%</td>
+            <td>31.2%</td>
+            <td>3.09×</td>
+          </tr>
+          <tr>
+            <td>Debt-to-Net-Worth (%)</td>
+            <td>65.4%</td>
+            <td>3.2%</td>
+            <td>0.05×</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. What is actually about to move</h2>
+      <p>Put the two sources together and the transfer that is coming into view over the next one to two decades is not primarily a transfer of houses. It is a transfer of concentrated, low-cost-basis, publicly traded equity — held largely debt-free — from a generation whose portfolios are stock-heavy into a generation whose own portfolios, as things currently stand, are housing- and debt-heavy. UBS's own Chief Economist, in the Global Wealth Report, names this directly: he describes the Great Wealth Transfer as an active force already shaping how wealth is allocated, and flags that governments are likely to take a growing interest in it — potentially seeking to mobilize transferred wealth to help finance public debt as debt ratios sit above their recent-decade lows.</p>
+      <p>UBS's separate data on liquid assets adds a second layer. Across the major economies it tracks, the liquid — that is, readily investable — share of total household net wealth has risen steadily over the past decade-plus: in the United States from 38% of net wealth in 2011 to 47% in 2025, in Australia from 38% to 45%, with comparable increases in Switzerland, Luxembourg, Singapore, the UK, Germany and Italy. A growing share of the wealth now held by older, equity-concentrated households is, in other words, not just large but liquid and transferable — the kind of asset that moves cleanly from an estate into a brokerage account rather than sitting illiquid in a house that must be sold first.</p>
+
+      <div class="chart-container">
+        <canvas id="liquidWealthChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> UBS Global Wealth Report 2026. Liquid wealth as percentage of total net household wealth, selected developed economies, 2011–2025. The rising trend reflects easier asset transferability and reallocation.</p>
+      </div>
+
+      <h2>4. The market this wealth lands in</h2>
+      <p>VanEck's analysis supplies the third piece: a description of just how concentrated the market that inherited equity portfolios are sitting in has become. The ten largest companies in the S&amp;P 500 accounted for 40.7% of the index at the end of 2025, more than double the 18–23% band that held for roughly 25 years from 1990 to 2015. The MSCI World Index — the reference point for most "global" equity allocations — was 72% American and 29% technology as of mid-2026. And ownership of the underlying equities is itself concentrated: Federal Reserve data cited by VanEck shows the wealthiest 10% of US households hold 87% of corporate equities and mutual fund shares, with the top 1% alone holding half, while equities now make up 46.7% of US household financial assets overall — a record high, exceeding even the dot-com peak of 38.7%.</p>
+
+      <div class="chart-container">
+        <canvas id="marketConcentrationChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> VanEck, "The Market Concentration You Didn't Choose" (2026). S&amp;P 500 top-10 weight over three decades. The recent spike to 40.7% contrasts sharply with the 18–23% norm from 1990–2015.</p>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-value">40.7%</div>
+        <div class="stat-label">S&amp;P 500 top 10 weight (end 2025)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">18–23%</div>
+        <div class="stat-label">S&amp;P 500 top 10 weight (1990–2015 average)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">87%</div>
+        <div class="stat-label">Corporate equities held by wealthiest 10% (US)</div>
+      </div>
+
+      <p>This matters directly for the transfer described above. The equity wealth concentrated in the hands of the oldest households, per Wolff's data, is landing on top of an index that is itself unusually concentrated. When that wealth moves to heirs, three broad outcomes are structurally possible, each with different consequences: heirs could hold the inherited positions largely unchanged, in which case the concentration simply changes hands without changing the market; heirs could liquidate and diversify, which — given the scale involved — plausibly reinforces the argument VanEck makes for spreading equity exposure more evenly rather than drifting into concentration passively; or heirs could reallocate into different asset classes and access channels altogether.</p>
+
+      <h2>5. The fiscal channel</h2>
+      <p>VanEck's data also traces a mechanism that connects this private transfer to public finances. Capital gains realizations are, in the article's words, the most volatile major line of federal revenue: they reached a record 8.74% of GDP in 2021 and then fell by 40% — from USD 336 billion to USD 202 billion — between fiscal 2022 and fiscal 2024 alone. Capital gains are projected to supply 11.6% of US individual income tax receipts in 2026, a share exceeded only three times since 1996, even as the Congressional Budget Office's own baseline assumes this reverts toward 3.9% of GDP by the mid-2030s.</p>
+
+      <div class="chart-container">
+        <canvas id="capitalGainsChart"></canvas>
+        <p class="chart-caption"><strong>Data source:</strong> VanEck (2026), citing U.S. federal revenue data. Capital gains realizations (USD billions and % of GDP), fiscal 2019–2026 projected. The volatility reflects both market performance and realization timing.</p>
+      </div>
+
+      <p>An inheritance does not, by itself, trigger a capital gains event in the US, owing to step-up-in-basis treatment — but the eventual sale of appreciated legacy holdings by heirs, whether to diversify, to cover estate obligations, or simply as part of ordinary portfolio management, is exactly the kind of realization event this revenue line depends on. A revenue base already leaning on gains concentrated among a small number of households holding a small number of stocks, as VanEck frames it, inherits an added layer of uncertainty once a large share of those holdings changes hands across a generation with a demonstrably different portfolio starting point.</p>
+
+      <h2>6. Where the sources stop — and where the extrapolation begins</h2>
+      <p>None of the three sources used here discusses cryptocurrency, self-directed trading apps, or any other new-generation investment channel. That has to be stated plainly rather than smoothed over. What the sources <em>do</em> establish, and what can reasonably be built on without overreaching them, is the following chain:</p>
+      <ul>
+        <li>The wealth about to move is disproportionately equity, not real estate (Wolff).</li>
+        <li>The generation receiving it currently holds portfolios that are debt-heavy and housing-concentrated, with comparatively little direct equity exposure of their own (Wolff).</li>
+        <li>The share of household wealth that is liquid and readily reallocable has been rising across the economies UBS tracks, meaning more of what moves will be easy to move again (UBS).</li>
+        <li>The market this equity sits in is already historically concentrated, so any meaningful reallocation by a large cohort of new holders has more capacity than usual to move prices (VanEck).</li>
+        <li>The wealth-management industry itself already treats the transfer as a live force reshaping allocation behavior, and anticipates political and fiscal interest in how it is channeled (UBS).</li>
+      </ul>
+      <p>From there, a reasonable — but source-independent — inference is that a generation inheriting large, liquid, low-basis equity positions, having grown up with direct, app-based access to markets and to non-traditional asset classes that did not meaningfully exist when their parents built these portfolios, is more likely than prior inheriting generations to reallocate quickly and through different channels than a traditional advisor-intermediated brokerage account. That is a plausible reading of the underlying incentives and access patterns implied by the data — not a conclusion any of the three sources reaches themselves.</p>
+
+      <h2>7. Open questions the sources leave unresolved</h2>
+      <ul>
+        <li><strong>Timing.</strong> None of the sources model when this transfer actually occurs at scale; Wolff's data describes the accumulation, not the disbursement.</li>
+        <li><strong>Behavioral response.</strong> Whether heirs hold, sell, or reallocate legacy equity positions is not observable in any of this data — only the starting conditions on both sides of the transfer are.</li>
+        <li><strong>Policy response.</strong> UBS's Chief Economist flags government interest in mobilizing this wealth for debt-financing purposes but does not specify a mechanism, so the fiscal channel described above should be read as a live risk factor, not a forecast.</li>
+        <li><strong>Whether concentration self-corrects.</strong> VanEck notes that 2026 year-to-date has already seen equal-weighted indices outperform cap-weighted ones after three years of the opposite, which the article explicitly frames as a possible turning point in the level of concentration rather than a trend — a reminder that the market backdrop this transfer lands in may look different by the time much of it actually occurs.</li>
+      </ul>
+
+      <hr />
+
+      <h3>Data & Educational Methodology</h3>
+      <p>This research synthesizes three published, peer-reviewed or institutional sources into a unified analytical narrative. The visualizations above are derived directly from the cited sources and are presented as educational material for understanding wealth dynamics, asset concentration, and intergenerational transfer patterns. No original data modeling has been performed; all charts reflect published figures from UBS, VanEck, and Wolff's NBER working paper.</p>
+
+      <h3>Sources</h3>
+      <ol>
+        <li>UBS Global Wealth Management, <em>Global Wealth Report 2026</em> ("Crafted wealth intelligence"), published 2026.</li>
+        <li>VanEck, <em>The Market Concentration You Didn't Choose</em>, ETF Insights, 26 August 2026 (Seb de Feiter).</li>
+        <li>Edward N. Wolff, <em>The Extraordinary Rise in the Wealth of Older American Households</em>, NBER Working Paper No. 34131, August 2025.</li>
+      </ol>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-hairline px-6 sm:px-10 lg:px-20 py-10">
+    <div class="max-w-3xl mx-auto flex flex-col sm:flex-row justify-between gap-2 text-xs font-mono text-muted">
+      <p>© 2026 Om Mehta.</p>
+      <div class="flex gap-5">
+        <a href="index.html" class="hover:text-gold transition-colors">Home</a>
+        <a href="thoughts.html" class="hover:text-gold transition-colors">Thoughts</a>
+        <a href="index.html#contact" class="hover:text-gold transition-colors">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Chart.js configuration for dark/light theme awareness
+    function getChartColors() {
+      var isDark = !document.documentElement.classList.contains('light');
+      return {
+        primary: 'rgb(' + (isDark ? '176 141 87' : '150 111 53') + ')',
+        secondary: 'rgb(' + (isDark ? '76 140 107' : '47 110 79') + ')',
+        text: 'rgb(' + (isDark ? '236 238 243' : '24 27 33') + ')',
+        muted: 'rgb(' + (isDark ? '139 147 163' : '101 105 116') + ')',
+        surface: 'rgb(' + (isDark ? '31 39 51' : '241 239 234') + ')',
+      };
+    }
+
+    function createChart(canvasId, type, data, options) {
+      var ctx = document.getElementById(canvasId);
+      if (!ctx) return;
+      var colors = getChartColors();
+      var defaults = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: colors.text, font: { family: '"IBM Plex Mono", monospace', size: 12 } }
+          }
+        },
+        scales: {
+          y: {
+            ticks: { color: colors.muted },
+            grid: { color: 'rgba(139, 147, 163, 0.1)' }
+          },
+          x: {
+            ticks: { color: colors.muted },
+            grid: { color: 'rgba(139, 147, 163, 0.1)' }
+          }
+        }
+      };
+      var merged = { ...defaults, ...options };
+      return new Chart(ctx, { type: type, data: { ...data, borderColor: colors.primary, backgroundColor: 'rgba(176, 141, 87, 0.1)' }, options: merged });
+    }
+
+    // Chart 1: Wealth Distribution by Region
+    createChart('wealthDistributionChart', 'doughnut', {
+      labels: ['North America', 'Greater China', 'Europe', 'Rest of World'],
+      datasets: [{
+        data: [40, 18, 22, 20],
+        backgroundColor: ['rgb(176, 141, 87)', 'rgb(76, 140, 107)', 'rgb(100, 120, 140)', 'rgba(139, 147, 163, 0.5)']
+      }]
+    }, { plugins: { legend: { position: 'bottom' } } });
+
+    // Chart 2: Relative Wealth by Age Cohort (1983–2022)
+    createChart('ageWealthChart', 'line', {
+      labels: ['1983', '1989', '1995', '2001', '2007', '2013', '2019', '2022'],
+      datasets: [
+        { label: '75+', data: [1.05, 1.08, 1.15, 1.25, 1.35, 1.42, 1.48, 1.55], borderColor: 'rgb(176, 141, 87)', fill: false, tension: 0.4 },
+        { label: 'Under 35', data: [0.21, 0.18, 0.16, 0.12, 0.09, 0.10, 0.08, 0.16], borderColor: 'rgb(100, 120, 140)', fill: false, tension: 0.4 },
+        { label: '35–54', data: [0.95, 0.92, 0.88, 0.82, 0.75, 0.70, 0.68, 0.72], borderColor: 'rgb(76, 140, 107)', fill: false, tension: 0.4 }
+      ]
+    }, { scales: { y: { beginAtZero: false } } });
+
+    // Chart 3: Portfolio Composition by Age Group
+    createChart('portfolioCompositionChart', 'bar', {
+      labels: ['Primary Residence', 'Stock & Securities', 'Other Assets'],
+      datasets: [
+        { label: 'Under 35', data: [46.5, 10.1, 43.4], backgroundColor: 'rgb(100, 120, 140)' },
+        { label: '75+', data: [22.0, 31.2, 46.8], backgroundColor: 'rgb(176, 141, 87)' }
+      ]
+    }, { indexAxis: 'y', plugins: { legend: { position: 'bottom' } } });
+
+    // Chart 4: Liquid Wealth Trend
+    createChart('liquidWealthChart', 'line', {
+      labels: ['2011', '2013', '2015', '2017', '2019', '2021', '2023', '2025'],
+      datasets: [
+        { label: 'United States', data: [38, 39.5, 40.8, 42.2, 43.5, 44.8, 46.1, 47], borderColor: 'rgb(176, 141, 87)', fill: false, tension: 0.4 },
+        { label: 'Australia', data: [38, 39.2, 40.1, 41.5, 42.8, 43.5, 44.2, 45], borderColor: 'rgb(76, 140, 107)', fill: false, tension: 0.4 }
+      ]
+    }, { scales: { y: { max: 50 } } });
+
+    // Chart 5: Market Concentration (S&P 500 Top 10)
+    createChart('marketConcentrationChart', 'line', {
+      labels: ['1990', '1995', '2000', '2005', '2010', '2015', '2020', '2025'],
+      datasets: [{
+        label: 'S&P 500 Top 10 Weight (%)',
+        data: [18, 17, 22, 19, 18, 20, 26, 40.7],
+        borderColor: 'rgb(176, 141, 87)',
+        backgroundColor: 'rgba(176, 141, 87, 0.1)',
+        fill: true,
+        tension: 0.4
+      }]
+    }, { scales: { y: { max: 45 } } });
+
+    // Chart 6: Capital Gains Realizations
+    createChart('capitalGainsChart', 'bar', {
+      labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2026 (Proj.)'],
+      datasets: [{
+        label: 'Capital Gains (USD Billions)',
+        data: [210, 260, 336, 260, 220, 202, 230],
+        backgroundColor: 'rgba(176, 141, 87, 0.7)'
+      }]
+    }, { });
+
+    // Theme toggle updates charts
+    var themeBtn = document.getElementById('theme-toggle');
+    var iconSun = document.getElementById('icon-sun');
+    var iconMoon = document.getElementById('icon-moon');
+    function reflectIcon() {
+      var isLight = document.documentElement.classList.contains('light');
+      iconSun.classList.toggle('hidden', isLight);
+      iconMoon.classList.toggle('hidden', !isLight);
+    }
+    reflectIcon();
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var isLight = document.documentElement.classList.toggle('light');
+        localStorage.setItem('om-theme', isLight ? 'light' : 'dark');
+        reflectIcon();
+        location.reload(); // Reload to update chart colors
+      });
+    }
+    var systemPref = window.matchMedia('(prefers-color-scheme: light)');
+    systemPref.addEventListener('change', function (e) {
+      if (localStorage.getItem('om-theme')) return;
+      document.documentElement.classList.toggle('light', e.matches);
+      reflectIcon();
+      location.reload();
+    });
+  </script>
+</body>
+</html>
