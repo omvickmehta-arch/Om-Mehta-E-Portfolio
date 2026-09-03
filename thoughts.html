@@ -41,9 +41,6 @@
       var stored = localStorage.getItem('om-theme');
       var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
       if (theme === 'light') document.documentElement.classList.add('light');
-      if (localStorage.getItem('om-reduced-motion') === 'true') {
-        document.documentElement.classList.add('no-motion');
-      }
     })();
   </script>
 
@@ -73,22 +70,6 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-    }
-    html.no-motion {
-      scroll-behavior: auto !important;
-    }
-    html.no-motion * {
-      animation-duration: 0s !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0s !important;
-      transform: none !important;
-    }
-    html.no-motion .reveal {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-    html.no-motion .card-hover:hover {
-      transform: none !important;
     }
 
     .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -160,7 +141,7 @@
 
 <body class="bg-base text-ink font-sans antialiased">
 
-  <!-- THEME & MOTION TOGGLES -->
+  <!-- THEME TOGGLE -->
   <div class="fixed top-5 right-5 z-50 flex flex-col gap-2 items-end">
     <button id="theme-toggle" aria-label="Toggle light and dark theme" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors">
       <svg id="icon-sun" class="theme-toggle-icon w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -170,9 +151,6 @@
       <svg id="icon-moon" class="theme-toggle-icon w-4 h-4 text-gold hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
-    </button>
-    <button id="motion-toggle" aria-label="Disable animations and transitions" class="w-10 h-10 rounded-full border border-hairline bg-surface/80 backdrop-blur-md flex items-center justify-center hover:border-gold transition-colors text-xs font-mono text-muted">
-      <span id="motion-icon" class="text-[11px]">⟳</span>
     </button>
   </div>
 
@@ -362,25 +340,6 @@
       document.documentElement.classList.toggle('light', e.matches);
       reflectIcon();
     });
-
-    // Motion toggle
-    var motionBtn = document.getElementById('motion-toggle');
-    var motionIcon = document.getElementById('motion-icon');
-    function reflectMotion() {
-      var isReduced = document.documentElement.classList.contains('no-motion');
-      motionIcon.style.opacity = isReduced ? '0.5' : '1';
-    }
-    reflectMotion();
-    if (motionBtn) {
-      motionBtn.addEventListener('click', function () {
-        var isReduced = document.documentElement.classList.toggle('no-motion');
-        localStorage.setItem('om-reduced-motion', String(isReduced));
-        reflectMotion();
-        if (isReduced) {
-          document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('is-visible'); });
-        }
-      });
-    }
   </script>
 </body>
 </html>
